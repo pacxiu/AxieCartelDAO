@@ -1,0 +1,71 @@
+@value tablet, accent-light, overlay, accent-hover from '../../assets/styles/variables.module.sass'
+
+.modal
+  outline: none
+  background-color: #fff
+  width: auto
+  max-width: 75rem
+  min-width: 40rem
+  margin: 0 auto
+  position: relative
+  border-radius: 0.3rem
+  padding: 2.5rem
+
+  &Overlay
+    Overlay
+    position: fixed
+    top: 0
+    left: 0
+    right: 0
+    bottom: 0
+    background-color: overlay
+    display: flex
+    align-items: flex-start
+    padding: 4rem 0
+    overflow-y: auto
+    z-index: 21
+
+.close
+  position: absolute
+  width: 2.2rem
+  height: 2.2rem
+  right: 0.75rem
+  top: 0.75rem
+
+  &:hover
+    cursor: pointer
+
+    &:before, &:after
+      background-color: accent-hover
+
+  &:before, &:after
+    position: absolute
+    content: ' '
+    left: 1.1rem
+    height: 1.9rem
+    width: 0.2rem
+    min-width: 3px
+    background-color: #bfbfbf
+    transition: 0.3s ease-in-out
+
+  &:before
+    transform: rotate(45deg)
+
+  &:after
+    transform: rotate(-45deg)
+
+.title
+  font-size: 1em
+  font-weight: normal
+  margin: 0
+
+  &Container
+    font-size: 3rem
+    margin: 0 0 1em
+    display: flex
+    align-items: center
+    justify-content: space-between
+
+@media tablet
+  .modal
+    min-width: 29rem

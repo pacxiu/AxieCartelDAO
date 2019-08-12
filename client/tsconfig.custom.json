@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "noImplicitAny": false,  
+    "baseUrl": "./src",
+    "paths": {
+      "components/*": ["components/*"],
+      "containers/*": ["containers/*"],
+      "duck/*": ["duck/*"],
+      "shared/*": ["shared/*"],
+      "pages/*": ["pages/*"],
+      "assets/*": ["assets/*"],
+    }
+  }
+}

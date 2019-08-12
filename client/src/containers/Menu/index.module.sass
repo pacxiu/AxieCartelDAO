@@ -1,0 +1,34 @@
+@value nav-height, cMineShaft, font-color from 'assets/styles/variables.module.sass'
+@import 'assets/styles/functions.module.sass'
+
+@value boxShadow: 0 0 11px -2px rgba(0, 0, 0,.75);
+
+.nav
+  position: fixed
+  top: 0
+  left: 0
+  right: 0
+  height: nav-height
+  z-index: 20
+  display: flex
+  justify-content: center
+  align-items: center
+  transition: 0.3s ease-in-out
+  background: transparent
+
+  &.hovered
+    background-color: #fff
+
+  &.fixed
+    background-color: #fff
+    box-shadow: boxShadow
+
+.logo
+  position: absolute
+  left: pxToRem(30)
+  display: flex
+  align-items: center
+
+  img
+    max-height: calc(nav-height * 0.8)
+    margin-right: pxToRem(10)

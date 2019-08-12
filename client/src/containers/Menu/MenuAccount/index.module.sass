@@ -1,0 +1,63 @@
+@value font-color from 'assets/styles/variables.module.sass'
+@import 'assets/styles/functions.module.sass'
+
+@value cMossGreen: #a0d7a3
+@value cRoman: #dc6666
+
+.accountContainer
+  text-align: center
+  display: flex
+  align-items: center
+
+.login
+  background: cMossGreen url('assets/icons/user.png') bottom center/85% no-repeat
+  outline: none
+  border: none
+  border-radius: 50%
+  width: pxToRem(35)
+  height: pxToRem(35)
+  cursor: pointer
+  transition: 0.3s ease-in-out
+  margin-right: 0.5em
+
+  &.in
+    background-color: cRoman
+
+.dropdown
+  display: flex
+  width: 7.5em
+  position: relative
+  padding: pxToRem(10) 0
+  font-size: pxToRem(17)
+
+  &Content
+    display: none
+    position: absolute
+    left: 0
+    right: 0
+    bottom: 0
+    transform: translateY(100%)
+    border: 1px solid font-color
+    background-color: #fff
+    border: 1px solid rgba(0, 0 ,0, 0.3)
+    box-shadow: 0 0 11px 1px rgba(0, 0, 0,.3)
+    padding: 0.75em 0.3em
+    font-size: 0.85em
+
+  &Button
+    border: 1px solid rgba(0, 0 ,0, 0.75)
+    transition: 0.3s ease-in-out
+    display: inline-block
+    padding: 0.3em 0.4em
+    cursor: pointer
+
+    &:hover
+      color: #fff
+      background-color: rgba(0, 0 ,0, 0.75)
+
+  &:hover
+    .dropdownContent
+      display: block
+
+
+

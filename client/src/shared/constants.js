@@ -1,0 +1,9 @@
+export const AXIE_URL = 'https://axieinfinity.com/api/';
+export const AXIE_ICU = 'https://axie.icu/api/search?';
+export const V1_AXIE_URL = 'https://api.axieinfinity.com/v1/';
+export const V2_AXIE_URL = 'https://axieinfinity.com/api/v2/';
+export const V1_FIGURE_URL = 'https://api.axieinfinity.com/v1/figure/';
+export const CORS_URL_HEROKU = 'https://cors-anywhere.herokuapp.com/';
+// export const CORS_URL_HEROKU = '';
+// export const CORS_URL = '';
+export const CORS_URL = '';

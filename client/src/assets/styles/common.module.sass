@@ -1,0 +1,58 @@
+@value font-color, nav-height, tablet from './variables.module.sass'
+@import 'assets/styles/functions.module.sass'
+
+\:global
+  #app
+    // padding-top: nav-height
+
+body, html
+  position: relative
+  margin: 0
+  padding: 0
+  font-family: Poppins, sans-serif
+  color: font-color
+  width: 100%
+  height: 100%
+  background: #fff
+
+body
+  font-size: pxToRem(18)
+
+/* 1920px is base as 10px = 1 rem */
+html
+  font-size: 16px
+
+/* below 1920px */
+@media tablet
+  html
+    font-size:  14px 
+
+/* above 1920px */
+@media screen and (min-width: 2240px)
+  html
+    font-size:  18px 
+
+@media screen and (min-width: 2560px)
+  html
+    font-size:  21px 
+
+@media screen and (min-width: 3840px)
+  html
+    font-size:  24px
+
+a
+  text-decoration: none
+  color: inherit
+
+  &:hover
+    text-decoration: none
+    color: inherit
+
+img
+  backface-visibility: hidden
+
+button
+  outline: none!important
+  border: none
+  color: inherit
+  background: none

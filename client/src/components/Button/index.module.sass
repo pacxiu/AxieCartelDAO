@@ -1,0 +1,51 @@
+@value accent, accent-plant, cTundora, font-color from 'assets/styles/variables.module.sass'
+@import 'assets/styles/functions.module.sass'
+
+.button
+  color: #fff
+  background-color: accent
+  border: 1px solid accent
+  font-weight: 500
+  font-size: pxToRem(17)
+  letter-spacing: 0.05em
+  font-family: inherit
+  text-transform: uppercase
+  display: table
+  margin: 0 auto
+  padding: .7em 1.5em .6em
+  border-radius: 2.5em
+  width: auto
+  transition: all .3s ease-in-out
+  cursor: pointer
+  outline: none!important
+
+  &:hover
+    background-color: #fff
+    color: accent
+
+  &[disabled]
+    color: #fff
+    background-color: #bbb
+    border: none
+    cursor: not-allowed
+
+.white
+  background: #fff
+  border: none
+  color: cTundora
+  box-shadow: 0 0.2em 1.3em -0.6em font-color
+  padding-left: 2.5em
+  padding-right: 2.5em
+  position: relative
+  z-index: 2
+
+  &:hover
+    background: cTundora
+    color: #fff
+
+.label
+  background-color: accent-plant
+  border-color: accent-plant
+
+  &:hover
+    color: accent-plant

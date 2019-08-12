@@ -1,0 +1,35 @@
+@value mobile, nav-height, zombie-background from 'assets/styles/variables.module.sass'
+@import 'assets/styles/functions.module.sass'
+
+.fullHeight
+  min-height: 100vh
+  height: auto
+  display: flex
+  align-items: center
+  justify-content: center
+  padding: pxToRem(20)
+  padding-top: pxToRem(100)
+  box-sizing: border-box
+  width: 100%
+
+.start
+  align-items: flex-start
+
+.zombies
+  background: zombie-background
+
+.axie
+  font-family: Varela Round
+  color: #606060
+
+.col12
+  width: 100%
+
+.container
+  width: 100%
+  max-width: pxToRem(1300)
+  margin: 0 auto
+
+@media mobile
+  .fullHeight
+    padding: pxToRem(10) pxToRem(5)

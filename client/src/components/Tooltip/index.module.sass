@@ -1,0 +1,33 @@
+@value font-color from 'assets/styles/variables.module.sass'
+@import 'assets/styles/functions.module.sass'
+
+.tooltip
+  margin-top: 1rem!important
+  padding: 0.65em
+  font-size: pxToRem(13)
+  font-weight: 500
+  background: #fff!important
+  opacity: 1!important
+  color: font-color!important
+  text-align: center
+  z-index: 10
+  max-width: 21em
+
+  &:before
+    display: none
+
+  &:after
+    display: none
+
+  &Border
+    box-shadow: none
+    border: 1px solid font-color!important
+
+    &:after
+      display: block
+      border-bottom-color: font-color!important
+
+    &:before
+      display: block
+      border-bottom-color: font-color!important
+
