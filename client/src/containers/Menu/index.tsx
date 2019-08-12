@@ -78,10 +78,15 @@ class Menu extends Component<MenuProps, MenuState> {
         <Link to="/" className={styles.logo}>
           <img src={logo} alt="AxieCartelDAO logo" />
         </Link>
-        <div className={styles.menuItems}>
-          Test Link
-        </div>
-        <div>
+        <ul className={styles.menuList}>
+          <li className={styles.menuItem}>
+            <Link className={styles.menuItemLink} to="/proposals">Proposals</Link>
+          </li>
+          <li className={styles.menuItem}>
+            <Link className={styles.menuItemLink} to="/members">Members</Link>
+          </li>
+        </ul>
+        <div className={styles.right}>
           <MenuAccount />
         </div>
       </nav>

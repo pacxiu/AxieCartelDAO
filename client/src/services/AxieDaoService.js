@@ -24,3 +24,22 @@ export const getCurrentPeriod = async () => {
   const currentPeriod = await AxieDao.methods.getCurrentPeriod().call();
   return currentPeriod;
 }
+
+export const getAllEvents = async () => {
+  let { AxieDao } = store.getState().contracts;
+
+  if (!AxieDao) {
+    AxieDao = await initContract();
+  }
+
+  const events = await AxieDao.getPastEvents('allEvents', {
+    fromBlock: 0,
+    toBlock: 'latest',
+  });
+
+  console.log(events);
+  const processed = events.filter(event => event.event === 'ProcessProposal').map(event => event.returnValues.applicant);
+  console.log(processed);
+
+  return events;
+}

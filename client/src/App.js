@@ -6,15 +6,21 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 // import components and containers
 import Menu from 'containers/Menu';
 import NotificationsList from 'containers/NotificationsList';
+
 import Home from 'pages/Home';
-import Profile from 'pages/Profile';
+import Members from 'pages/Members';
+import Member from 'pages/Member';
+import Proposals from 'pages/Proposals';
+import Proposal from 'pages/Proposal';
+import NotFound from 'pages/NotFound';
+
 import Footer from 'components/Footer';
 
 import { setToken, setUserData } from 'duck/user';
 import { createRequest } from 'shared/helpers';
 
 import { initWeb3 } from 'services/Web3Service';
-import { getCurrentPeriod } from 'services/AxieDaoService';
+import { getCurrentPeriod, getAllEvents } from 'services/AxieDaoService';
 
 class App extends Component {
   componentDidMount() {
@@ -24,7 +30,7 @@ class App extends Component {
 
   setup = async () => {
     await initWeb3();
-    getCurrentPeriod();
+    getAllEvents();
   }
 
   getCookie = (cName) => {
@@ -58,8 +64,12 @@ class App extends Component {
             <NotificationsList />
             <Menu />
             <Switch>
-              <Route path="/profile/:address" component={Profile} />
-              <Route path="/" component={Home} />
+              <Route path="/member/:address" component={Member} />
+              <Route path="/members/" component={Members} />
+              <Route path="/proposals" component={Proposals} />
+              <Route path="/proposal/:id" exact component={Proposal} />
+              <Route path="/" exact component={Home} />
+              <Route path="/" component={NotFound} />
             </Switch>
             <Footer {...{ location }} />
           </div>)}

@@ -11,7 +11,7 @@ import { ZombieButton } from 'components/Button';
 
 import { createRequest } from 'shared/helpers';
 
-class Profile extends Component {
+class Proposal extends Component {
   constructor() {
     super();
 
@@ -42,7 +42,7 @@ class Profile extends Component {
         {profile
           ? (
             <Container>
-              Test
+              Proposal
             </Container>
           )
           : <Loader />
@@ -56,4 +56,4 @@ const mapStateToProps = ({ user }) => ({
   user,
 });
 
-export default connect(mapStateToProps)(Profile);
+export default connect(mapStateToProps)(Proposal);
