@@ -8,3 +8,6 @@ export const SET_CONTRACT = 'SET_CONTRACT';
 export const SET_ADDRESS = 'SET_ADDRESS';
 export const SET_TOKEN = 'SET_TOKEN';
 export const SET_USER_DATA = 'SET_USER_DATA';
+
+// dao data
+export const SET_MEMBERS = 'SET_MEMBERS';
