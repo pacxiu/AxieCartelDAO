@@ -1,4 +1,4 @@
-import { SET_WEB3 } from './types';
+export const SET_WEB3 = 'SET_WEB3';
 
 // setting initial state
 const initialState = null;

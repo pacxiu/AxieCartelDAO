@@ -9,40 +9,34 @@ import { FullHeight, Container } from 'components/Layout';
 import Loader from 'components/Loader';
 import { ZombieButton } from 'components/Button';
 
-import { createRequest } from 'shared/helpers';
+import { getProposalData } from 'services/AxieDaoService';
 
 class Proposal extends Component {
-  constructor() {
-    super();
-
-    this.state = {
-      profile: null,
-    };
-
-    this.loadProfile = this.loadProfile.bind(this);
-    this.deleteDeck = this.deleteDeck.bind(this);
-  }
+  state = {
+    proposalData: null,
+  };
 
   componentDidMount() {
-    this.loadProfile();
+    this.loadProposalData();
   }
 
-  async loadProfile() {
-    const { address } = this.props.match.params;
-
-    console.log(address);
+  loadProposalData = async () => {
+    const proposalData = await getProposalData(this.props.match.params.id);
+    console.log(proposalData);
+    this.setState({ proposalData });
   }
 
   render() {
-    const { profile } = this.state;
+    const { proposalData } = this.state;
     const { user } = this.props;
 
     return (
       <FullHeight className={classnames(styles.container, styles.custom)}>
-        {profile
+        {proposalData
           ? (
             <Container>
-              Proposal
+              {proposalData.proposalIndex}
+              {proposalData.applicant}
             </Container>
           )
           : <Loader />

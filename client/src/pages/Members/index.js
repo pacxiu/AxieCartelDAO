@@ -12,25 +12,42 @@ import Loader from 'components/Loader';
 import { getMemberData } from 'services/AxieDaoService';
 
 class MemberCard extends Component {
+  state = {
+    memberData: null,
+  };
+
   componentDidMount() {
-    getMemberData(this.props.member);
+    this.loadMemberData();
+  }
+
+  loadMemberData = async () => {
+    const memberData = await getMemberData(this.props.member);
+    this.setState({ memberData });
   }
 
   render() {
-    const { member } = this.props;
+    const { member, tribute } = this.props;
+    const { memberData } = this.state;
 
     return (
-      <p>{member}</p>
+      memberData
+        ? (
+          <React.Fragment>
+            <p><Link to={`/member/${member}`}>{member}</Link>Tribute {tribute}</p>
+            <p>Shares: {memberData.shares}</p>
+          </React.Fragment>
+        )
+        : null
     )
   }
 }
 
-const Members = ({ members }) => (
+const Members = ({ members, tributes }) => (
   <FullHeight className={classnames(styles.container, styles.custom)}>
     <Container>
-      {members
+      {members && tributes
         ? members.map(member => (
-          <MemberCard key={member} {...{ member }} />
+          <MemberCard key={member} {...{ member, tribute: tributes[member] }} />
         ))
         : <Loader />
       }
@@ -38,8 +55,14 @@ const Members = ({ members }) => (
   </FullHeight>
 );
 
-const mapStateToProps = ({ daoData: { members } }) => ({
+const mapStateToProps = ({
+  daoData: {
+    members,
+    tributes,
+  },
+}) => ({
   members,
+  tributes,
 });
 
 export default connect(mapStateToProps)(Members);

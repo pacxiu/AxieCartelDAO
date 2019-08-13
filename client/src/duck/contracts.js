@@ -1,4 +1,4 @@
-import { SET_CONTRACT } from './types';
+export const SET_CONTRACT = 'SET_CONTRACT';
 
 // setting initial state
 const initialState = {

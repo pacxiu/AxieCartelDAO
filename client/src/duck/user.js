@@ -1,4 +1,6 @@
-import { SET_ADDRESS, SET_TOKEN, SET_USER_DATA } from './types';
+export const SET_ADDRESS = 'SET_ADDRESS';
+export const SET_TOKEN = 'SET_TOKEN';
+export const SET_USER_DATA = 'SET_USER_DATA';
 
 // setting initial state
 const initialState = {

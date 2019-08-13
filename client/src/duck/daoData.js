@@ -1,27 +1,28 @@
-import { SET_MEMBERS } from './types';
-
+export const SET_DATA = 'SET_DATA';
 // setting initial state
 const initialState = {
   members: null,
+  tributes: null,
+  proposals: null,
 };
 
 // Reducer
 export default (state = initialState, action = {}) => {
   const { payload = {} } = action;
-  const { members } = payload;
+  const { data } = payload;
 
   switch (action.type) {
-    case SET_MEMBERS:
-      return { ...state, members };
+    case SET_DATA:
+      return { ...state, ...data };
     default:
       return state;
   }
 };
 
 // Action Creators
-export const setMembers = members => (
+export const setData = data => (
   {
-    type: SET_MEMBERS,
-    payload: { members },
+    type: SET_DATA,
+    payload: { data },
   }
 );

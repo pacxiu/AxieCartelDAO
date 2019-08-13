@@ -51,10 +51,19 @@ export const initContract = (abi, address) => {
 
   if (!web3) {
     return new Promise(resolve => setTimeout(() => {
-      console.log('he')
-      initContract(abi, address);
+      resolve(initContract(abi, address));
     }, 1000));
   }
 
   return new web3.eth.Contract(abi, address);
 };
+
+export const fromWei = (amount) => {
+  if (!amount) {
+    return 0;
+  }
+
+  const { web3 } = store.getState();
+
+  return web3.utils.fromWei(amount.toString(), 'ether');
+}

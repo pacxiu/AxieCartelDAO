@@ -9,40 +9,34 @@ import { FullHeight, Container } from 'components/Layout';
 import Loader from 'components/Loader';
 import { ZombieButton } from 'components/Button';
 
-import { createRequest } from 'shared/helpers';
+import { getMemberData } from 'services/AxieDaoService';
 
 class Member extends Component {
-  constructor() {
-    super();
-
-    this.state = {
-      profile: null,
-    };
-
-    this.loadProfile = this.loadProfile.bind(this);
-    this.deleteDeck = this.deleteDeck.bind(this);
-  }
+  state = {
+    memberData: null,
+  };
 
   componentDidMount() {
-    this.loadProfile();
+    this.loadMemberData();
   }
 
-  async loadProfile() {
-    const { address } = this.props.match.params;
-
-    console.log(address);
+  loadMemberData = async () => {
+    const memberData = await getMemberData(this.props.match.params.address);
+    console.log(memberData);
+    this.setState({ memberData });
   }
 
   render() {
-    const { profile } = this.state;
+    const { memberData } = this.state;
     const { user } = this.props;
 
     return (
       <FullHeight className={classnames(styles.container, styles.custom)}>
-        {profile
+        {memberData
           ? (
             <Container>
-              Test
+              {memberData.shares}
+              {memberData.delegateKey}
             </Container>
           )
           : <Loader />
