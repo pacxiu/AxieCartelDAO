@@ -20,7 +20,9 @@ import { setToken, setUserData } from 'duck/user';
 import { createRequest } from 'shared/helpers';
 
 import { initWeb3 } from 'services/Web3Service';
-import { getCurrentPeriod, getAllEvents } from 'services/AxieDaoService';
+import { getCurrentPeriod, getAllEvents, getTotalShares } from 'services/AxieDaoService';
+import { balanceOf } from 'services/ApprovedTokenService';
+import contracts from 'shared/contracts'
 
 class App extends Component {
   componentDidMount() {
@@ -31,6 +33,10 @@ class App extends Component {
   setup = async () => {
     await initWeb3();
     getAllEvents();
+
+    // rest of tests
+    console.log(`Total Shares: ${await getTotalShares()}`);
+    console.log(`Balance Of: ${await balanceOf(contracts.GuildBank.address)}`);
   }
 
   getCookie = (cName) => {

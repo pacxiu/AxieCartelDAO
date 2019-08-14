@@ -3,6 +3,7 @@ import store from 'store';
 
 import { setContract } from 'duck/contracts';
 import { initContract as initWeb3Contract, fromWei } from 'services/Web3Service';
+import { APPROVED_TOKEN } from 'shared/contracts';
 
 // export const EVENTS = {
 //   SubmitProposal: 'SubmitProposal',

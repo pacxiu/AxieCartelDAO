@@ -21,7 +21,7 @@ export const EVENTS = {
   Abort: 'Abort',
   UpdateDelegateKey: 'UpdateDelegateKey',
   SummonComplete: 'SummonComplete',
-}
+};
 
 export const initContract = async () => {
   const AxieDao = await initWeb3Contract(
@@ -40,7 +40,7 @@ const getDataFromEvents = (events) => {
     total: [],
     processed: 0,
     aborted: 0,
-  }
+  };
 
   events.forEach(({
     event,
@@ -106,11 +106,12 @@ export const getAllEvents = async () => {
   return events;
 };
 
+// DYNAMIC DATA
 export const getMemberData = async (address) => {
   let { AxieDao } = store.getState().contracts;
 
   if (!AxieDao) {
-    console.log(AxieDao, address);
+    console.info(AxieDao, address);
     AxieDao = await initContract();
   }
 
@@ -129,7 +130,8 @@ export const getProposalData = async (id) => {
   return proposalData;
 };
 
-// Periods
+// STATIC Fields from contract
+// including config stuff
 export const getCurrentPeriod = async () => {
   let { AxieDao } = store.getState().contracts;
 
@@ -175,6 +177,17 @@ export const getPeriodDuration = async () => {
 };
 
 // other data
+export const getTotalShares = async () => {
+  let { AxieDao } = store.getState().contracts;
+
+  if (!AxieDao) {
+    AxieDao = await initContract();
+  }
+
+  const totalShares = await AxieDao.methods.totalShares().call();
+  return totalShares;
+};
+
 export const getProcessingReward = async () => {
   let { AxieDao } = store.getState().contracts;
 
@@ -209,7 +222,8 @@ export const canRagequit = async (lastVote) => {
   return canRagequit;
 };
 
-// Transactions triggering
+// INTERACT WITH CONTRACT
+// TO DO: rework encodePayload and tx repetetive stuff
 export const submitVote = async (from, proposalIndex, uintVote, encodedPayload) => {
   let { AxieDao } = store.getState().contracts;
 
@@ -230,11 +244,11 @@ export const submitVote = async (from, proposalIndex, uintVote, encodedPayload) 
     .once('transactionHash', txHash => console.info(txHash))
     .then(resp => resp)
     .catch((err) => {
-      console.log(err);
+      console.error(err);
       return { error: 'rejected transaction' };
     });
   return vote;
-}
+};
 
 export const rageQuit = async (from, amount, encodedPayload) => {
   let { AxieDao } = store.getState().contracts;
@@ -254,7 +268,7 @@ export const rageQuit = async (from, amount, encodedPayload) => {
     .once('transactionHash', txHash => console.info(txHash))
     .then(resp => resp)
     .catch((err) => {
-      console.log(err);
+      console.error(err);
       return { error: 'rejected transaction' };
     });
   return rage;
@@ -278,7 +292,7 @@ export const processProposal = async (from, id, encodedPayload) => {
     .once('transactionHash', txHash => console.info(txHash))
     .then(resp => resp)
     .catch((err) => {
-      console.log(err);
+      console.error(err);
       return { error: 'rejected transaction' };
     });
   return processedProposal;
@@ -311,7 +325,7 @@ export const submitProposal = async (
     .once('transactionHash', txHash => console.info(txHash))
     .then(resp => resp)
     .catch((err) => {
-      console.log(err);
+      console.error(err);
       return { error: 'rejected transaction' };
     });
 

@@ -38,7 +38,7 @@ class MemberCard extends Component {
           </React.Fragment>
         )
         : null
-    )
+    );
   }
 }
 

@@ -66,4 +66,4 @@ export const fromWei = (amount) => {
   const { web3 } = store.getState();
 
   return web3.utils.fromWei(amount.toString(), 'ether');
-}
+};

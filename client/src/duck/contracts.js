@@ -4,6 +4,7 @@ export const SET_CONTRACT = 'SET_CONTRACT';
 const initialState = {
   AxieDao: null,
   GuildBank: null,
+  ApprovedToken: null,
 };
 
 // Reducer

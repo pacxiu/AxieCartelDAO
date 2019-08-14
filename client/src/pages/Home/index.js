@@ -9,7 +9,7 @@ import Button from 'components/Button';
 
 const Home = () => (
   <FullHeight className={classnames(styles.container, styles.custom)}>
-    Axie Cartel Dao
+    <Container>Axie Cartel Dao</Container>
   </FullHeight>
 );
 

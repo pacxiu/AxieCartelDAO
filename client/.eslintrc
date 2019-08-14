@@ -18,7 +18,7 @@
     "no-underscore-dangle": 0,
     "camelcase": 0,
     "no-unused-vars": 1,
-    "no-console": [1, { allow: ["warn", "error"] }],
+    "no-console": [1, { allow: ["warn", "error", "info"] }],
     "no-param-reassign": ["error", { "props": false }],
     "import/no-named-as-default": 0,
     "import/extensions": 0,

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import classnames from 'classnames';
@@ -7,7 +6,6 @@ import styles from './index.module.sass';
 
 import { FullHeight, Container } from 'components/Layout';
 import Loader from 'components/Loader';
-import { ZombieButton } from 'components/Button';
 
 import { getMemberData } from 'services/AxieDaoService';
 
@@ -22,13 +20,12 @@ class Member extends Component {
 
   loadMemberData = async () => {
     const memberData = await getMemberData(this.props.match.params.address);
-    console.log(memberData);
+    console.info(memberData);
     this.setState({ memberData });
   }
 
   render() {
     const { memberData } = this.state;
-    const { user } = this.props;
 
     return (
       <FullHeight className={classnames(styles.container, styles.custom)}>
@@ -46,8 +43,4 @@ class Member extends Component {
   }
 }
 
-const mapStateToProps = ({ user }) => ({
-  user,
-});
-
-export default connect(mapStateToProps)(Member);
+export default Member;
