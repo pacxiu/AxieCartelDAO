@@ -33,17 +33,6 @@ export const initContract = async () => {
   return AxieDao;
 };
 
-export const getCurrentPeriod = async () => {
-  let { AxieDao } = store.getState().contracts;
-
-  if (!AxieDao) {
-    AxieDao = await initContract();
-  }
-
-  const currentPeriod = await AxieDao.methods.getCurrentPeriod().call();
-  return currentPeriod;
-};
-
 const getDataFromEvents = (events) => {
   const members = [];
   const tributes = {};
@@ -138,4 +127,193 @@ export const getProposalData = async (id) => {
 
   const proposalData = await AxieDao.methods.proposalQueue(id).call();
   return proposalData;
+};
+
+// Periods
+export const getCurrentPeriod = async () => {
+  let { AxieDao } = store.getState().contracts;
+
+  if (!AxieDao) {
+    AxieDao = await initContract();
+  }
+
+  const currentPeriod = await AxieDao.methods.getCurrentPeriod().call();
+  return currentPeriod;
+};
+
+export const getGracePeriodLength = async () => {
+  let { AxieDao } = store.getState().contracts;
+
+  if (!AxieDao) {
+    AxieDao = await initContract();
+  }
+
+  const gracePeriod = await AxieDao.methods.gracePeriodLength().call();
+  return gracePeriod;
+};
+
+export const getVotingPeriodLength = async () => {
+  let { AxieDao } = store.getState().contracts;
+
+  if (!AxieDao) {
+    AxieDao = await initContract();
+  }
+
+  const votingPeriod = await AxieDao.methods.votingPeriodLength().call();
+  return votingPeriod;
+};
+
+export const getPeriodDuration = async () => {
+  let { AxieDao } = store.getState().contracts;
+
+  if (!AxieDao) {
+    AxieDao = await initContract();
+  }
+
+  const periodDuration = await AxieDao.methods.periodDuration().call();
+  return periodDuration;
+};
+
+// other data
+export const getProcessingReward = async () => {
+  let { AxieDao } = store.getState().contracts;
+
+  if (!AxieDao) {
+    AxieDao = await initContract();
+  }
+
+  const processingReward = await AxieDao.methods.processingReward().call();
+  return processingReward;
+};
+
+export const getProposalDeposit = async () => {
+  let { AxieDao } = store.getState().contracts;
+
+  if (!AxieDao) {
+    AxieDao = await initContract();
+  }
+
+  const proposalDeposit = await AxieDao.methods.proposalDeposit().call();
+  return proposalDeposit;
+};
+
+// MODIFIERS
+export const canRagequit = async (lastVote) => {
+  let { AxieDao } = store.getState().contracts;
+
+  if (!AxieDao) {
+    AxieDao = await initContract();
+  }
+
+  const canRagequit = await AxieDao.methods.canRagequit(lastVote).call();
+  return canRagequit;
+};
+
+// Transactions triggering
+export const submitVote = async (from, proposalIndex, uintVote, encodedPayload) => {
+  let { AxieDao } = store.getState().contracts;
+
+  if (!AxieDao) {
+    AxieDao = await initContract();
+  }
+
+  if (encodedPayload) {
+    const data = AxieDao.methods
+      .submitVote(proposalIndex, uintVote)
+      .encodeABI();
+    return data;
+  }
+
+  const vote = AxieDao.methods
+    .submitVote(proposalIndex, uintVote)
+    .send({ from })
+    .once('transactionHash', txHash => console.info(txHash))
+    .then(resp => resp)
+    .catch((err) => {
+      console.log(err);
+      return { error: 'rejected transaction' };
+    });
+  return vote;
+}
+
+export const rageQuit = async (from, amount, encodedPayload) => {
+  let { AxieDao } = store.getState().contracts;
+
+  if (!AxieDao) {
+    AxieDao = await initContract();
+  }
+
+  if (encodedPayload) {
+    const data = AxieDao.methods.ragequit(amount).encodeABI();
+    return data;
+  }
+
+  const rage = AxieDao.methods
+    .ragequit(amount)
+    .send({ from })
+    .once('transactionHash', txHash => console.info(txHash))
+    .then(resp => resp)
+    .catch((err) => {
+      console.log(err);
+      return { error: 'rejected transaction' };
+    });
+  return rage;
+};
+
+export const processProposal = async (from, id, encodedPayload) => {
+  let { AxieDao } = store.getState().contracts;
+
+  if (!AxieDao) {
+    AxieDao = await initContract();
+  }
+
+  if (encodedPayload) {
+    const data = AxieDao.methods.processProposal(id).encodeABI();
+    return data;
+  }
+
+  const processedProposal = AxieDao.methods
+    .processProposal(id)
+    .send({ from })
+    .once('transactionHash', txHash => console.info(txHash))
+    .then(resp => resp)
+    .catch((err) => {
+      console.log(err);
+      return { error: 'rejected transaction' };
+    });
+  return processedProposal;
+};
+
+export const submitProposal = async (
+  from,
+  applicant,
+  tokenTribute,
+  sharesRequested,
+  details,
+  encodedPayload = false,
+) => {
+  let { AxieDao } = store.getState().contracts;
+
+  if (!AxieDao) {
+    AxieDao = await initContract();
+  }
+
+  if (encodedPayload) {
+    const data = AxieDao.methods
+      .submitProposal(applicant, tokenTribute, sharesRequested, details)
+      .encodeABI();
+    return data;
+  }
+
+  const proposal = AxieDao.methods
+    .submitProposal(applicant, tokenTribute, sharesRequested, details)
+    .send({ from })
+    .once('transactionHash', txHash => console.info(txHash))
+    .then(resp => resp)
+    .catch((err) => {
+      console.log(err);
+      return { error: 'rejected transaction' };
+    });
+
+  return proposal;
 };

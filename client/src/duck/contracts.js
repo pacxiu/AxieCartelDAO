@@ -3,6 +3,7 @@ export const SET_CONTRACT = 'SET_CONTRACT';
 // setting initial state
 const initialState = {
   AxieDao: null,
+  GuildBank: null,
 };
 
 // Reducer
