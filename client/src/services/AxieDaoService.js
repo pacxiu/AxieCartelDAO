@@ -4,6 +4,7 @@ import store from 'store';
 import { setContract } from 'duck/contracts';
 import { setData } from 'duck/daoData';
 import { initContract as initWeb3Contract, fromWei } from 'services/Web3Service';
+import { balanceOf } from 'services/ApprovedTokenService';
 
 // event SubmitProposal(uint256 proposalIndex, address indexed delegateKey, address indexed memberAddress, address indexed applicant, uint256 tokenTribute, uint256 sharesRequested);
 // event SubmitVote(uint256 indexed proposalIndex, address indexed delegateKey, address indexed memberAddress, uint8 uintVote);
@@ -31,79 +32,6 @@ export const initContract = async () => {
 
   store.dispatch(setContract({ AxieDao }));
   return AxieDao;
-};
-
-const getDataFromEvents = (events) => {
-  const members = [];
-  const tributes = {};
-  const proposals = {
-    total: [],
-    processed: 0,
-    aborted: 0,
-  };
-
-  events.forEach(({
-    event,
-    returnValues: {
-      applicant,
-      tokenTribute,
-      summoner,
-      proposalIndex,
-      didPass,
-    },
-  }) => {
-    switch (event) {
-      case EVENTS.SubmitProposal:
-        proposals.total.push(proposalIndex);
-
-        break;
-      case EVENTS.Abort:
-        proposals.aborted += 1;
-
-        break;
-      case EVENTS.ProcessProposal: {
-        if (didPass) {
-          const tribute = parseInt(fromWei(tokenTribute), 10);
-          members.push(applicant);
-          tributes[applicant] = tributes[applicant] ? tributes[applicant] + tribute : tribute;
-        }
-        proposals.processed += 1;
-
-        break;
-      }
-      case EVENTS.SummonComplete:
-        members.push(summoner);
-        tributes[summoner] = 0;
-        break;
-      default:
-        break;
-    }
-  });
-
-  const uniqueMembers = [...new Set(members)];
-
-  store.dispatch(setData({
-    members: uniqueMembers,
-    tributes,
-    proposals,
-  }));
-};
-
-export const getAllEvents = async () => {
-  let { AxieDao } = store.getState().contracts;
-
-  if (!AxieDao) {
-    AxieDao = await initContract();
-  }
-
-  const events = await AxieDao.getPastEvents('allEvents', {
-    fromBlock: 0,
-    toBlock: 'latest',
-  });
-
-  getDataFromEvents(events);
-
-  return events;
 };
 
 // DYNAMIC DATA
@@ -330,4 +258,91 @@ export const submitProposal = async (
     });
 
   return proposal;
+};
+
+const getGeneralData = async () => {
+  const shares = await getTotalShares();
+  // eslint-disable-next-line
+  const bank = await balanceOf(contracts.GuildBank.address);
+
+  return {
+    shares,
+    bank,
+  }
+}
+
+const getDataFromEvents = (events, general) => {
+  const members = [];
+  const tributes = {};
+  const proposals = {
+    total: [],
+    processed: 0,
+    aborted: 0,
+  };
+
+  events.forEach(({
+    event,
+    returnValues: {
+      applicant,
+      tokenTribute,
+      summoner,
+      proposalIndex,
+      didPass,
+    },
+  }) => {
+    switch (event) {
+      case EVENTS.SubmitProposal:
+        proposals.total.push(proposalIndex);
+
+        break;
+      case EVENTS.Abort:
+        proposals.aborted += 1;
+
+        break;
+      case EVENTS.ProcessProposal: {
+        if (didPass) {
+          const tribute = parseInt(fromWei(tokenTribute), 10);
+          members.push(applicant);
+          tributes[applicant] = tributes[applicant] ? tributes[applicant] + tribute : tribute;
+        }
+        proposals.processed += 1;
+
+        break;
+      }
+      case EVENTS.SummonComplete:
+        members.push(summoner);
+        tributes[summoner] = 0;
+        break;
+      default:
+        break;
+    }
+  });
+
+  const uniqueMembers = [...new Set(members)];
+
+  store.dispatch(setData({
+    members: uniqueMembers,
+    tributes,
+    proposals,
+    general,
+  }));
+};
+
+export const getAllEvents = async () => {
+  let { AxieDao } = store.getState().contracts;
+
+  if (!AxieDao) {
+    AxieDao = await initContract();
+  }
+
+  const events = await AxieDao.getPastEvents('allEvents', {
+    fromBlock: 0,
+    toBlock: 'latest',
+  });
+
+  const general = await getGeneralData();
+
+  getDataFromEvents(events, general);
+
+  return events;
 };

@@ -4,6 +4,7 @@ const initialState = {
   members: null,
   tributes: null,
   proposals: null,
+  general: null,
 };
 
 // Reducer

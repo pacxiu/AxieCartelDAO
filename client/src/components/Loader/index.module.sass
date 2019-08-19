@@ -1,23 +1,16 @@
+@import 'assets/styles/functions.module.sass'
+
 .loader
   display: table
   content: ''
   position: relative
   animation: loading 0.8s linear infinite
-  width: 5rem
-  height: 5rem
+  width: pxToRem(50)
+  height: pxToRem(50)
   border-radius: 50%
-  box-shadow: 0 3px 0 0 rgb(141, 101, 255)
+  box-shadow: 0 2px 0 0 var(--font-color)
   transform-origin: 50% 50%
-  margin: 3rem auto
-
-.axie
-  width: 2.5rem
-  height: 2.5rem
-  margin: 0 auto
-
-.white
-  box-shadow: 0 3px 0 0 #fff
-  margin: 0 auto
+  margin: pxToRem(20) auto
 
 @keyframes loading
   0%

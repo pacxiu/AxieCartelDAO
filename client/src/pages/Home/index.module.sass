@@ -1,2 +1,35 @@
-@value accent from 'assets/styles/variables.module.sass'
 @import 'assets/styles/functions.module.sass'
+
+.container
+  text-align: center
+
+.title
+  font-weight: 900
+  font-size: pxToRem(40)
+  margin-bottom: 0.2em
+
+.subtitle
+  font-size: pxToRem(20)
+  margin-top: 0
+  font-weight: normal
+
+.data
+  &Container
+    margin-top: pxToRem(70)
+
+  &Title
+    font-size: pxToRem(15)
+    font-weight: bold
+    display: block
+
+.shares
+  display: flex
+  width: 20em
+  justify-content: space-between
+  margin: 0 auto
+
+.bankValue
+  font-size: 1.5em
+
+.sharesValue
+  font-size: 1.2em
