@@ -8,8 +8,14 @@ import styles from './index.module.sass';
 import { FullHeight, Container } from 'components/Layout';
 import Button from 'components/Button';
 import Loader from 'components/Loader';
+import Card, { CardsContainer } from 'components/Card';
+import { WithDaiIcon } from 'components/Icons';
 
 import { getProposalData } from 'services/AxieDaoService';
+
+// interface Proposal {
+//   sharesRequested: number;
+// }
 
 class ProposalCard extends Component {
   state = {
@@ -32,10 +38,22 @@ class ProposalCard extends Component {
     return (
       proposalData
         ? (
-          <React.Fragment>
-            <p><Link to={`/proposal/${proposal}`}>{proposal}</Link></p>
-            <p>Shares:</p>
-          </React.Fragment>
+          <Card className={styles.proposal}>
+            <Link to={`/proposal/${proposal}`}>
+              <p>Timer</p>
+              <p className={styles.proposalTitle}>Title</p>
+              <div className={styles.data}>
+                <div className={styles.dataItem}>
+                  <p>Shares:</p>
+                  <p>{proposalData.sharesRequested}</p>
+                </div>
+                <div className={styles.dataItem}>
+                  <p>Tribute</p>
+                  <WithDaiIcon type="dark">{proposalData.tribute}</WithDaiIcon>
+                </div>
+              </div>
+            </Link>
+          </Card>
         )
         : null
     )
@@ -44,14 +62,14 @@ class ProposalCard extends Component {
 
 const Proposals = ({ proposals }) => (
   <FullHeight className={classnames(styles.container, styles.custom)}>
-    <Container>
+    <CardsContainer>
       {proposals
         ? proposals.total.map(proposal => (
           <ProposalCard key={proposal} {...{ proposal }} />
         ))
         : <Loader />
       }
-    </Container>
+    </CardsContainer>
   </FullHeight>
 );
 

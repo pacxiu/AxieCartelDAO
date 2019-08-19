@@ -8,6 +8,9 @@ import styles from './index.module.sass';
 import { FullHeight, Container } from 'components/Layout';
 import Button from 'components/Button';
 import Loader from 'components/Loader';
+import Card, { CardsContainer } from 'components/Card';
+import TextEllipsis from 'components/TextEllipsis';
+import { WithDaiIcon } from 'components/Icons';
 
 import { getMemberData } from 'services/AxieDaoService';
 
@@ -32,10 +35,25 @@ class MemberCard extends Component {
     return (
       memberData
         ? (
-          <React.Fragment>
-            <p><Link to={`/member/${member}`}>{member}</Link>Tribute {tribute}</p>
-            <p>Shares: {memberData.shares}</p>
-          </React.Fragment>
+          <Card className={styles.member}>
+            <Link to={`/member/${member}`}>
+              <p>
+                <TextEllipsis className={styles.memberAddress}>
+                  {member}
+                </TextEllipsis>
+              </p>
+              <div className={styles.data}>
+                <div className={styles.dataItem}>
+                  <p>Shares:</p>
+                  <p>{memberData.shares}</p>
+                </div>
+                <div className={styles.dataItem}>
+                  <p>Tribute</p>
+                  <WithDaiIcon type="dark">{tribute}</WithDaiIcon>
+                </div>
+              </div>
+            </Link>
+          </Card>
         )
         : null
     );
@@ -44,14 +62,14 @@ class MemberCard extends Component {
 
 const Members = ({ members, tributes }) => (
   <FullHeight className={classnames(styles.container, styles.custom)}>
-    <Container>
+    <CardsContainer>
       {members && tributes
         ? members.map(member => (
           <MemberCard key={member} {...{ member, tribute: tributes[member] }} />
         ))
         : <Loader />
       }
-    </Container>
+    </CardsContainer>
   </FullHeight>
 );
 
