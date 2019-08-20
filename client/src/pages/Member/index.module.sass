@@ -1,14 +1,11 @@
-@value accent from 'assets/styles/variables.module.sass'
+@import 'assets/styles/functions.module.sass'
 
-.decks
-  display: flex
-  flex-wrap: wrap
-  justify-content: center
+.container
+  text-align: left
 
-.deck
-  text-align: center
-  max-width: 20rem
-  margin: 0 1rem
+.title
+  font-weight: 500
+  margin-bottom: 0em
 
-  &Img
-    max-width: 100%
+.contribution
+  margin: pxToRem(30) 0

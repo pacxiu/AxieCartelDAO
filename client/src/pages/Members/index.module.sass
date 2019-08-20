@@ -2,19 +2,15 @@
 @import 'assets/styles/functions.module.sass'
 
 .member
+  min-height: pxToRem(140)
+  display: flex
+  align-items: center
+
   &Address
     max-width: 9em
     font-size: 0.85em
     font-style: italic
+    margin-bottom: 0.3em
 
   p
     margin-bottom: 0
-
-.data
-  display: flex
-
-  &Item
-    text-align: center
-    
-    &:first-child
-      margin-right: 1.5em

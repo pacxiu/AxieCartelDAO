@@ -9,26 +9,25 @@ import Button from 'components/Button';
 import Loader from 'components/Loader';
 import Card, { CardsContainer } from 'components/Card';
 import TextEllipsis from 'components/TextEllipsis';
-import { WithDaiIcon } from 'components/Icons';
+import { Contribution } from 'components/Typography';
 
 import { getAllMembersData } from 'services/AxieDaoService';
 
-const MemberCard = ({ member }) => (
-  <Card className={styles.member} link={`/member/${member.address}`}>
-    <p>
-      <TextEllipsis className={styles.memberAddress}>
-        {member.address}
-      </TextEllipsis>
-    </p>
-    <div className={styles.data}>
-      <div className={styles.dataItem}>
-        <p>Shares:</p>
-        <p>{member.shares}</p>
-      </div>
-      <div className={styles.dataItem}>
-        <p>Tribute</p>
-        <WithDaiIcon type="dark">{member.tribute}</WithDaiIcon>
-      </div>
+const MemberCard = ({
+  member: {
+    address,
+    shares,
+    tribute,
+  },
+}) => (
+  <Card className={styles.member} link={`/member/${address}`}>
+    <div>
+      <p>
+        <TextEllipsis className={styles.memberAddress}>
+          {address}
+        </TextEllipsis>
+      </p>
+      <Contribution {...{ shares, tribute }} />
     </div>
   </Card>
 );

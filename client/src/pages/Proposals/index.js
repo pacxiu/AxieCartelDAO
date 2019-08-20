@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import classnames from 'classnames';
 import styles from './index.module.sass';
@@ -8,8 +9,7 @@ import { FullHeight, Container } from 'components/Layout';
 import Button from 'components/Button';
 import Loader from 'components/Loader';
 import Card, { CardsContainer } from 'components/Card';
-import { WithDaiIcon } from 'components/Icons';
-
+import { Contribution } from 'components/Typography';
 import { getAllProposalsData, getCurrentPeriod } from 'services/AxieDaoService';
 
 // interface Proposal {
@@ -26,27 +26,21 @@ const ProposalCard = ({
     details,
     yesVotes,
     noVotes,
-    maxTotalSharesAtYesVote,
   },
 }) => (
-  <Card className={styles.proposal} link={`/proposal/${id}`}>
+  <Card className={styles.proposal}>
     <p>Timer</p>
-    <p>{id}</p>
     <p className={styles.proposalTitle}>Title</p>
     <p className={styles.proposalTitle}>{details}</p>
-    <div className={styles.data}>
-      <div className={styles.dataItem}>
-        <p>Shares:</p>
-        <p>{sharesRequested}</p>
-      </div>
-      <div className={styles.dataItem}>
-        <p>Tribute</p>
-        <WithDaiIcon type="dark">{tokenTribute}</WithDaiIcon>
-      </div>
-    </div>
+    <Contribution
+      shares={sharesRequested}
+      tribute={tokenTribute}
+    />
     <p>Yes: {yesVotes}</p>
     <p>No: {noVotes}</p>
-    <p>Max: {maxTotalSharesAtYesVote}</p>
+    <Link to={`/proposal/${id}`}>
+      <Button>View</Button>
+    </Link>
   </Card>
 );
 
@@ -102,17 +96,15 @@ class Proposals extends React.Component {
       } = proposal;
       const periodDifference = currentPeriod - startingPeriod;
 
-      if (periodDifference < votingPeriodLength) {
+      if (periodDifference <= votingPeriodLength) {
         proposals.voting.push(proposal);
-      } else if (periodDifference < totalGracePeriod) {
+      } else if (periodDifference <= totalGracePeriod) {
         proposals.grace.push(proposal);
       } else if (processed) {
         proposals.completed.push(proposal);
       } else {
         proposals.readyForProcess.push(proposal);
       }
-
-      console.log(currentPeriod, proposal.startingPeriod);
     });
 
     this.setState({ proposals });
@@ -139,7 +131,12 @@ class Proposals extends React.Component {
                     <li
                       key={name}
                       onClick={() => { this.changeActiveTab(state); }}
-                      className={styles.navItem}
+                      className={classnames(
+                        styles.navItem,
+                        {
+                          [styles.active]: state === activeTab,
+                        },
+                      )}
                     >
                       {name} ({proposals[state].length})
                     </li>
