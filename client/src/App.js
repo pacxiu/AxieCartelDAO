@@ -13,6 +13,7 @@ import Member from 'pages/Member';
 import Proposals from 'pages/Proposals';
 import Proposal from 'pages/Proposal';
 import NotFound from 'pages/NotFound';
+import LoadingScreen from 'pages/LoadingScreen'
 
 import Footer from 'components/Footer';
 
@@ -20,9 +21,7 @@ import { setToken, setUserData } from 'duck/user';
 import { createRequest } from 'shared/helpers';
 
 import { initWeb3 } from 'services/Web3Service';
-import { getCurrentPeriod, getAllEvents } from 'services/AxieDaoService';
-import { balanceOf } from 'services/ApprovedTokenService';
-import contracts from 'shared/contracts'
+import { getAllEvents } from 'services/AxieDaoService';
 
 class App extends Component {
   componentDidMount() {
@@ -59,20 +58,27 @@ class App extends Component {
   }
 
   render() {
+    const { initialized } = this.props;
+
     return (
       <Router>
         <Route render={({ location }) => (
           <div id="app">
             <NotificationsList />
             <Menu />
-            <Switch>
-              <Route path="/member/:address" component={Member} />
-              <Route path="/members/" component={Members} />
-              <Route path="/proposals" component={Proposals} />
-              <Route path="/proposal/:id" exact component={Proposal} />
-              <Route path="/" exact component={Home} />
-              <Route path="/" component={NotFound} />
-            </Switch>
+            {initialized
+              ? (
+                <Switch>
+                  <Route path="/member/:address" component={Member} />
+                  <Route path="/members/" component={Members} />
+                  <Route path="/proposals" component={Proposals} />
+                  <Route path="/proposal/:id" exact component={Proposal} />
+                  <Route path="/" exact component={Home} />
+                  <Route path="/" component={NotFound} />
+                </Switch>
+              )
+              : <LoadingScreen />
+            }
             <Footer {...{ location }} />
           </div>)}
         />
@@ -81,9 +87,13 @@ class App extends Component {
   }
 }
 
+const mapStateToProps = ({ daoData: { initialized } }) => ({
+  initialized,
+});
+
 const mapDispatchToProps = {
   setToken,
   setUserData,
 };
 
-export default hot(module)(connect(null, mapDispatchToProps)(App));
+export default hot(module)(connect(mapStateToProps, mapDispatchToProps)(App));

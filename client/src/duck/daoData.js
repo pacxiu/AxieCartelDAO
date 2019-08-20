@@ -2,9 +2,12 @@ export const SET_DATA = 'SET_DATA';
 // setting initial state
 const initialState = {
   members: null,
+  membersData: null,
   tributes: null,
   proposals: null,
+  proposalsData: null,
   general: null,
+  initialized: false,
 };
 
 // Reducer

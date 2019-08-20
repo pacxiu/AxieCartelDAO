@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 
 import classnames from 'classnames';
 import styles from './index.module.sass';
@@ -12,75 +11,68 @@ import Card, { CardsContainer } from 'components/Card';
 import TextEllipsis from 'components/TextEllipsis';
 import { WithDaiIcon } from 'components/Icons';
 
-import { getMemberData } from 'services/AxieDaoService';
+import { getAllMembersData } from 'services/AxieDaoService';
 
-class MemberCard extends Component {
-  state = {
-    memberData: null,
-  };
+const MemberCard = ({ member }) => (
+  <Card className={styles.member} link={`/member/${member.address}`}>
+    <p>
+      <TextEllipsis className={styles.memberAddress}>
+        {member.address}
+      </TextEllipsis>
+    </p>
+    <div className={styles.data}>
+      <div className={styles.dataItem}>
+        <p>Shares:</p>
+        <p>{member.shares}</p>
+      </div>
+      <div className={styles.dataItem}>
+        <p>Tribute</p>
+        <WithDaiIcon type="dark">{member.tribute}</WithDaiIcon>
+      </div>
+    </div>
+  </Card>
+);
 
+class Members extends React.Component {
   componentDidMount() {
-    this.loadMemberData();
+    const { membersData } = this.props;
+
+    if (!membersData) {
+      this.getMembersData();
+    }
   }
 
-  loadMemberData = async () => {
-    const memberData = await getMemberData(this.props.member);
-    this.setState({ memberData });
+  getMembersData = () => {
+    getAllMembersData();
   }
 
   render() {
-    const { member, tribute } = this.props;
-    const { memberData } = this.state;
+    const { membersData } = this.props;
 
     return (
-      memberData
-        ? (
-          <Card className={styles.member}>
-            <Link to={`/member/${member}`}>
-              <p>
-                <TextEllipsis className={styles.memberAddress}>
-                  {member}
-                </TextEllipsis>
-              </p>
-              <div className={styles.data}>
-                <div className={styles.dataItem}>
-                  <p>Shares:</p>
-                  <p>{memberData.shares}</p>
-                </div>
-                <div className={styles.dataItem}>
-                  <p>Tribute</p>
-                  <WithDaiIcon type="dark">{tribute}</WithDaiIcon>
-                </div>
-              </div>
-            </Link>
-          </Card>
-        )
-        : null
-    );
+      <FullHeight className={classnames(styles.container, styles.custom)}>
+        <CardsContainer>
+          {membersData
+            ? membersData.map(member => (
+              <MemberCard
+                key={member.address}
+                {...{ member }}
+              />
+            ))
+            : <Loader />
+          }
+        </CardsContainer>
+      </FullHeight>
+    )
   }
 }
 
-const Members = ({ members, tributes }) => (
-  <FullHeight className={classnames(styles.container, styles.custom)}>
-    <CardsContainer>
-      {members && tributes
-        ? members.map(member => (
-          <MemberCard key={member} {...{ member, tribute: tributes[member] }} />
-        ))
-        : <Loader />
-      }
-    </CardsContainer>
-  </FullHeight>
-);
-
 const mapStateToProps = ({
   daoData: {
-    members,
-    tributes,
+    membersData,
   },
 }) => ({
-  members,
-  tributes,
+  membersData,
 });
 
 export default connect(mapStateToProps)(Members);

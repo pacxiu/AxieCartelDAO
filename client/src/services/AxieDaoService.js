@@ -39,7 +39,6 @@ export const getMemberData = async (address) => {
   let { AxieDao } = store.getState().contracts;
 
   if (!AxieDao) {
-    console.info(AxieDao, address);
     AxieDao = await initContract();
   }
 
@@ -264,12 +263,19 @@ const getGeneralData = async () => {
   const shares = await getTotalShares();
   // eslint-disable-next-line
   const bank = await balanceOf(contracts.GuildBank.address);
+  // probably will not be dynamically changed
+  // const gracePeriodLength = await getGracePeriodLength();
+  // const votingPeriodLength = await getVotingPeriodLength();
+  // const periodDuration = await getPeriodDuration();
 
   return {
     shares,
     bank,
-  }
-}
+    gracePeriodLength: 35,
+    votingPeriodLength: 35,
+    periodDuration: 17280,
+  };
+};
 
 const getDataFromEvents = (events, general) => {
   const members = [];
@@ -325,6 +331,7 @@ const getDataFromEvents = (events, general) => {
     tributes,
     proposals,
     general,
+    initialized: true,
   }));
 };
 
@@ -345,4 +352,88 @@ export const getAllEvents = async () => {
   getDataFromEvents(events, general);
 
   return events;
+};
+
+// Helper utils for getting structured data for members and proposals
+export const getAllMembersData = async () => {
+  const { members, tributes } = store.getState().daoData;
+
+  const membersDataRequest = [];
+  const membersData = [];
+
+  members.forEach((member) => {
+    membersDataRequest.push(getMemberData(member));
+  });
+
+  await Promise.all(membersDataRequest)
+    .then((values) => {
+      values.forEach(({
+        delegateKey,
+        exists,
+        highestIndexYesVote,
+        shares,
+      }, i) => {
+        membersData.push({
+          address: members[i],
+          tribute: tributes[members[i]],
+          delegateKey,
+          exists,
+          highestIndexYesVote,
+          shares,
+        });
+      });
+
+      store.dispatch(setData({
+        membersData,
+      }));
+    });
+};
+
+export const getAllProposalsData = async () => {
+  const { proposals } = store.getState().daoData;
+
+  const proposalsDataRequest = [];
+  const proposalsData = [];
+
+  proposals.total.forEach((proposal) => {
+    proposalsDataRequest.push(getProposalData(proposal));
+  });
+
+  await Promise.all(proposalsDataRequest)
+    .then((values) => {
+      values.forEach(({
+        aborted,
+        applicant,
+        details,
+        didPass,
+        maxTotalSharesAtYesVote,
+        noVotes,
+        processed,
+        proposer,
+        sharesRequested,
+        startingPeriod,
+        tokenTribute,
+        yesVotes,
+      }, i) => {
+        proposalsData.push({
+          id: i,
+          aborted,
+          applicant,
+          details,
+          didPass,
+          maxTotalSharesAtYesVote,
+          noVotes,
+          processed,
+          proposer,
+          sharesRequested,
+          startingPeriod,
+          tokenTribute: parseInt(fromWei(tokenTribute), 10),
+          yesVotes,
+        });
+      });
+
+      store.dispatch(setData({
+        proposalsData,
+      }));
+    });
 };

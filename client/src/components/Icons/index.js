@@ -3,22 +3,15 @@ import React from 'react';
 import classnames from 'classnames';
 import styles from './index.module.sass';
 
-import DAIIcon from 'assets/icons/dai.png'
-
-// eslint-disable-next-line
-// export const DaiIcon = ({ className }) => (
-//   <img
-//     className={classnames(styles.dai, className)}
-//     src={DAIIcon}
-//     alt="Dai Icon"
-//   />
-// );
-
 export const DaiIcon = ({ className, type }) => (
   <svg
-    className={classnames(styles.dai, {
-      [styles[type]]: type,
-    })}
+    className={classnames(
+      styles.dai,
+      className,
+      {
+        [styles[type]]: type,
+      },
+    )}
     viewBox="0 0 165 184"
     fill="none"
   >
@@ -28,7 +21,7 @@ export const DaiIcon = ({ className, type }) => (
 );
 
 export const WithDaiIcon = ({ className, type, children }) => (
-  <span className={styles.withDai}>
+  <span className={classnames(styles.withDai, className)}>
     <DaiIcon {...{ type }} />
     {children}
   </span>

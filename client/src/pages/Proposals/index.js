@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 
 import classnames from 'classnames';
 import styles from './index.module.sass';
@@ -11,75 +10,165 @@ import Loader from 'components/Loader';
 import Card, { CardsContainer } from 'components/Card';
 import { WithDaiIcon } from 'components/Icons';
 
-import { getProposalData } from 'services/AxieDaoService';
+import { getAllProposalsData, getCurrentPeriod } from 'services/AxieDaoService';
 
 // interface Proposal {
 //   sharesRequested: number;
+//   tokenTribute: number;
 // }
 
-class ProposalCard extends Component {
+const ProposalCard = ({
+  proposal: {
+    id,
+    sharesRequested,
+    tokenTribute,
+    title,
+    details,
+    yesVotes,
+    noVotes,
+    maxTotalSharesAtYesVote,
+  },
+}) => (
+  <Card className={styles.proposal} link={`/proposal/${id}`}>
+    <p>Timer</p>
+    <p>{id}</p>
+    <p className={styles.proposalTitle}>Title</p>
+    <p className={styles.proposalTitle}>{details}</p>
+    <div className={styles.data}>
+      <div className={styles.dataItem}>
+        <p>Shares:</p>
+        <p>{sharesRequested}</p>
+      </div>
+      <div className={styles.dataItem}>
+        <p>Tribute</p>
+        <WithDaiIcon type="dark">{tokenTribute}</WithDaiIcon>
+      </div>
+    </div>
+    <p>Yes: {yesVotes}</p>
+    <p>No: {noVotes}</p>
+    <p>Max: {maxTotalSharesAtYesVote}</p>
+  </Card>
+);
+
+const ProposalsNavItems = [
+  { name: 'Voting', state: 'voting' },
+  { name: 'Grace', state: 'grace' },
+  { name: 'Completed', state: 'completed' },
+  { name: 'Ready for processing', state: 'readyForProcess' },
+];
+
+class Proposals extends React.Component {
   state = {
-    proposalData: null,
+    proposals: null,
+    activeTab: 'voting',
   };
 
   componentDidMount() {
-    this.loadProposalData();
+    const { proposalsData } = this.props;
+
+    if (!proposalsData) {
+      this.getProposalData();
+    } else {
+      this.filterProposals();
+    }
   }
 
-  loadProposalData = async () => {
-    const proposalData = await getProposalData(this.props.proposal);
-    this.setState({ proposalData });
+  componentDidUpdate(prevProps) {
+    if (!prevProps.proposalsData && this.props.proposalsData.length > 0) {
+      this.filterProposals();
+    }
+  }
+
+  getProposalData = () => {
+    getAllProposalsData();
+  }
+
+  filterProposals = async () => {
+    const { proposalsData, general } = this.props;
+    const { periodDuration, votingPeriodLength, gracePeriodLength } = general;
+    const totalGracePeriod = votingPeriodLength + gracePeriodLength;
+    const currentPeriod = await getCurrentPeriod();
+    const proposals = {
+      voting: [],
+      grace: [],
+      completed: [],
+      readyForProcess: [],
+    }
+
+    proposalsData.forEach((proposal) => {
+      const {
+        startingPeriod,
+        processed,
+      } = proposal;
+      const periodDifference = currentPeriod - startingPeriod;
+
+      if (periodDifference < votingPeriodLength) {
+        proposals.voting.push(proposal);
+      } else if (periodDifference < totalGracePeriod) {
+        proposals.grace.push(proposal);
+      } else if (processed) {
+        proposals.completed.push(proposal);
+      } else {
+        proposals.readyForProcess.push(proposal);
+      }
+
+      console.log(currentPeriod, proposal.startingPeriod);
+    });
+
+    this.setState({ proposals });
+  }
+
+  changeActiveTab = (activeTab) => {
+    this.setState({ activeTab });
   }
 
   render() {
-    const { proposal } = this.props;
-    const { proposalData } = this.state;
+    const { proposals, activeTab } = this.state;
 
     return (
-      proposalData
-        ? (
-          <Card className={styles.proposal}>
-            <Link to={`/proposal/${proposal}`}>
-              <p>Timer</p>
-              <p className={styles.proposalTitle}>Title</p>
-              <div className={styles.data}>
-                <div className={styles.dataItem}>
-                  <p>Shares:</p>
-                  <p>{proposalData.sharesRequested}</p>
-                </div>
-                <div className={styles.dataItem}>
-                  <p>Tribute</p>
-                  <WithDaiIcon type="dark">{proposalData.tribute}</WithDaiIcon>
-                </div>
-              </div>
-            </Link>
-          </Card>
-        )
-        : null
+      <FullHeight
+        className={classnames(styles.container, styles.custom)}
+        start={proposals !== null}
+      >
+        <CardsContainer>
+          {proposals
+            ? (
+              <React.Fragment>
+                <ul className={styles.nav}>
+                  {ProposalsNavItems.map(({ name, state }) => (
+                    <li
+                      key={name}
+                      onClick={() => { this.changeActiveTab(state); }}
+                      className={styles.navItem}
+                    >
+                      {name} ({proposals[state].length})
+                    </li>
+                  ))}
+                </ul>
+                {proposals[activeTab].map(proposal => (
+                  <ProposalCard
+                    key={proposal.id}
+                    {...{ proposal }}
+                  />
+                ))}
+              </React.Fragment>
+            )
+            : <Loader />
+          }
+        </CardsContainer>
+      </FullHeight>
     )
   }
 }
 
-const Proposals = ({ proposals }) => (
-  <FullHeight className={classnames(styles.container, styles.custom)}>
-    <CardsContainer>
-      {proposals
-        ? proposals.total.map(proposal => (
-          <ProposalCard key={proposal} {...{ proposal }} />
-        ))
-        : <Loader />
-      }
-    </CardsContainer>
-  </FullHeight>
-);
-
-
 const mapStateToProps = ({
   daoData: {
-    proposals,
+    proposalsData,
+    general,
   },
 }) => ({
-  proposals,
+  proposalsData,
+  general,
 });
 
 export default connect(mapStateToProps)(Proposals);
