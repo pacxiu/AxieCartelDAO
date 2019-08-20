@@ -8,14 +8,23 @@ import styles from './index.module.sass';
 import { FullHeight, Container } from 'components/Layout';
 import Button from 'components/Button';
 import Loader from 'components/Loader';
+import Countdown from 'components/Countdown';
 import Card, { CardsContainer } from 'components/Card';
 import { Contribution } from 'components/Typography';
+
 import { getAllProposalsData, getCurrentPeriod } from 'services/AxieDaoService';
 
 // interface Proposal {
 //   sharesRequested: number;
 //   tokenTribute: number;
 // }
+
+export const ProposalStatus = {
+  VOTING: 'VOTING',
+  GRACE: 'GRACE',
+  COMPLETED: 'COMPLETED',
+  READY_FOR_PROCESSING: 'READY_FOR_PROCESSING',
+};
 
 const ProposalCard = ({
   proposal: {
@@ -26,10 +35,13 @@ const ProposalCard = ({
     details,
     yesVotes,
     noVotes,
+    periodDifference,
+    status,
+    didPass,
   },
 }) => (
   <Card className={styles.proposal}>
-    <p>Timer</p>
+    <Countdown {...{ periodDifference, status, didPass }} />
     <p className={styles.proposalTitle}>Title</p>
     <p className={styles.proposalTitle}>{details}</p>
     <Contribution
@@ -45,16 +57,16 @@ const ProposalCard = ({
 );
 
 const ProposalsNavItems = [
-  { name: 'Voting', state: 'voting' },
-  { name: 'Grace', state: 'grace' },
-  { name: 'Completed', state: 'completed' },
-  { name: 'Ready for processing', state: 'readyForProcess' },
+  { name: 'Voting', state: ProposalStatus.VOTING },
+  { name: 'Grace', state: ProposalStatus.GRACE },
+  { name: 'Completed', state: ProposalStatus.COMPLETED },
+  { name: 'Ready for processing', state: ProposalStatus.READY_FOR_PROCESSING },
 ];
 
 class Proposals extends React.Component {
   state = {
     proposals: null,
-    activeTab: 'voting',
+    activeTab: ProposalStatus.VOTING,
   };
 
   componentDidMount() {
@@ -82,11 +94,12 @@ class Proposals extends React.Component {
     const { periodDuration, votingPeriodLength, gracePeriodLength } = general;
     const totalGracePeriod = votingPeriodLength + gracePeriodLength;
     const currentPeriod = await getCurrentPeriod();
+    const { VOTING, GRACE, COMPLETED, READY_FOR_PROCESSING } = ProposalStatus;
     const proposals = {
-      voting: [],
-      grace: [],
-      completed: [],
-      readyForProcess: [],
+      [VOTING]: [],
+      [GRACE]: [],
+      [COMPLETED]: [],
+      [READY_FOR_PROCESSING]: [],
     }
 
     proposalsData.forEach((proposal) => {
@@ -96,14 +109,30 @@ class Proposals extends React.Component {
       } = proposal;
       const periodDifference = currentPeriod - startingPeriod;
 
-      if (periodDifference <= votingPeriodLength) {
-        proposals.voting.push(proposal);
-      } else if (periodDifference <= totalGracePeriod) {
-        proposals.grace.push(proposal);
+      if (periodDifference < votingPeriodLength) {
+        proposals[VOTING].push({
+          ...proposal,
+          periodDifference: votingPeriodLength - periodDifference,
+          status: VOTING,
+        });
+      } else if (periodDifference < totalGracePeriod) {
+        proposals[GRACE].push({
+          ...proposal,
+          periodDifference: totalGracePeriod - periodDifference,
+          status: GRACE,
+        });
       } else if (processed) {
-        proposals.completed.push(proposal);
+        proposals[COMPLETED].push({
+          ...proposal,
+          periodDifference: totalGracePeriod - periodDifference,
+          status: COMPLETED,
+        });
       } else {
-        proposals.readyForProcess.push(proposal);
+        proposals[READY_FOR_PROCESSING].push({
+          ...proposal,
+          periodDifference: totalGracePeriod - periodDifference,
+          status: READY_FOR_PROCESSING,
+        });
       }
     });
 
