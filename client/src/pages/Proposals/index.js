@@ -12,19 +12,13 @@ import Countdown from 'components/Countdown';
 import Card, { CardsContainer } from 'components/Card';
 import { Contribution } from 'components/Typography';
 
+import { ProposalStatus, convertTitle } from 'shared/proposals';
 import { getAllProposalsData, getCurrentPeriod } from 'services/AxieDaoService';
 
 // interface Proposal {
 //   sharesRequested: number;
 //   tokenTribute: number;
 // }
-
-export const ProposalStatus = {
-  VOTING: 'VOTING',
-  GRACE: 'GRACE',
-  COMPLETED: 'COMPLETED',
-  READY_FOR_PROCESSING: 'READY_FOR_PROCESSING',
-};
 
 const ProposalCard = ({
   proposal: {
@@ -41,15 +35,26 @@ const ProposalCard = ({
   },
 }) => (
   <Card className={styles.proposal}>
-    <Countdown {...{ periodDifference, status, didPass }} />
-    <p className={styles.proposalTitle}>Title</p>
-    <p className={styles.proposalTitle}>{details}</p>
+    <Countdown {...{ periodDifference, status, didPass, className: styles.proposalTimer }} />
+    <p className={styles.proposalTitle}>{convertTitle(details, id)}</p>
     <Contribution
       shares={sharesRequested}
       tribute={tokenTribute}
     />
-    <p>Yes: {yesVotes}</p>
-    <p>No: {noVotes}</p>
+    <div className={styles.votesContainer}>
+      <span className={classnames(styles.votesCount, styles.votesNo)}>{noVotes}</span>
+      <span className={classnames(styles.votesCount, styles.votesYes)}>{yesVotes}</span>
+      <div className={styles.votesBar}>
+        <div
+          className={classnames(styles.votesBarFill, styles.votesBarNo)}
+          style={{ width: `${noVotes / (noVotes + yesVotes) * 100}%` }}
+        />
+        <div
+          className={classnames(styles.votesBarFill, styles.votesBarYes)}
+          style={{ width: `${yesVotes / (noVotes + yesVotes) * 100}%` }}
+        />
+      </div>
+    </div>
     <Link to={`/proposal/${id}`}>
       <Button>View</Button>
     </Link>
@@ -90,11 +95,9 @@ class Proposals extends React.Component {
   }
 
   filterProposals = async () => {
-    const { proposalsData, general } = this.props;
-    const { periodDuration, votingPeriodLength, gracePeriodLength } = general;
-    const totalGracePeriod = votingPeriodLength + gracePeriodLength;
-    const currentPeriod = await getCurrentPeriod();
+    const { proposalsData } = this.props;
     const { VOTING, GRACE, COMPLETED, READY_FOR_PROCESSING } = ProposalStatus;
+
     const proposals = {
       [VOTING]: [],
       [GRACE]: [],
@@ -103,37 +106,7 @@ class Proposals extends React.Component {
     }
 
     proposalsData.forEach((proposal) => {
-      const {
-        startingPeriod,
-        processed,
-      } = proposal;
-      const periodDifference = currentPeriod - startingPeriod;
-
-      if (periodDifference < votingPeriodLength) {
-        proposals[VOTING].push({
-          ...proposal,
-          periodDifference: votingPeriodLength - periodDifference,
-          status: VOTING,
-        });
-      } else if (periodDifference < totalGracePeriod) {
-        proposals[GRACE].push({
-          ...proposal,
-          periodDifference: totalGracePeriod - periodDifference,
-          status: GRACE,
-        });
-      } else if (processed) {
-        proposals[COMPLETED].push({
-          ...proposal,
-          periodDifference: totalGracePeriod - periodDifference,
-          status: COMPLETED,
-        });
-      } else {
-        proposals[READY_FOR_PROCESSING].push({
-          ...proposal,
-          periodDifference: totalGracePeriod - periodDifference,
-          status: READY_FOR_PROCESSING,
-        });
-      }
+      proposals[proposal.status].push(proposal);
     });
 
     this.setState({ proposals });

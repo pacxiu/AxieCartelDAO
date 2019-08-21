@@ -5,6 +5,7 @@ import { setContract } from 'duck/contracts';
 import { setData } from 'duck/daoData';
 import { initContract as initWeb3Contract, fromWei } from 'services/Web3Service';
 import { balanceOf } from 'services/ApprovedTokenService';
+import { ProposalStatus } from 'shared/proposals';
 
 // event SubmitProposal(uint256 proposalIndex, address indexed delegateKey, address indexed memberAddress, address indexed applicant, uint256 tokenTribute, uint256 sharesRequested);
 // event SubmitVote(uint256 indexed proposalIndex, address indexed delegateKey, address indexed memberAddress, uint8 uintVote);
@@ -261,6 +262,7 @@ export const submitProposal = async (
 
 const getGeneralData = async () => {
   const shares = await getTotalShares();
+  const currentPeriod = await getCurrentPeriod();
   // eslint-disable-next-line
   const bank = await balanceOf(contracts.GuildBank.address);
   // probably will not be dynamically changed
@@ -271,6 +273,7 @@ const getGeneralData = async () => {
   return {
     shares,
     bank,
+    currentPeriod,
     gracePeriodLength: 35,
     votingPeriodLength: 35,
     periodDuration: 17280,
@@ -390,7 +393,10 @@ export const getAllMembersData = async () => {
 };
 
 export const getAllProposalsData = async () => {
-  const { proposals } = store.getState().daoData;
+  const { proposals, general } = store.getState().daoData;
+  const { periodDuration, votingPeriodLength, gracePeriodLength, currentPeriod } = general;
+  const totalGracePeriod = votingPeriodLength + gracePeriodLength;
+  const { VOTING, GRACE, COMPLETED, READY_FOR_PROCESSING } = ProposalStatus;
 
   const proposalsDataRequest = [];
   const proposalsData = [];
@@ -415,6 +421,25 @@ export const getAllProposalsData = async () => {
         tokenTribute,
         yesVotes,
       }, i) => {
+        // calculate status and period differences
+        const proposalPeriodDifference = currentPeriod - startingPeriod;
+        let status;
+        let periodDifference;
+
+        if (proposalPeriodDifference < votingPeriodLength) {
+          periodDifference = votingPeriodLength - proposalPeriodDifference;
+          status = VOTING;
+        } else if (proposalPeriodDifference < totalGracePeriod) {
+          periodDifference = totalGracePeriod - proposalPeriodDifference;
+          status = GRACE;
+        } else if (processed) {
+          periodDifference = totalGracePeriod - proposalPeriodDifference;
+          status = COMPLETED;
+        } else {
+          periodDifference = totalGracePeriod - proposalPeriodDifference;
+          status = READY_FOR_PROCESSING;
+        }
+
         proposalsData.push({
           id: i,
           aborted,
@@ -422,13 +447,15 @@ export const getAllProposalsData = async () => {
           details,
           didPass,
           maxTotalSharesAtYesVote,
-          noVotes,
+          noVotes: parseInt(noVotes, 10),
           processed,
           proposer,
           sharesRequested,
           startingPeriod,
           tokenTribute: parseInt(fromWei(tokenTribute), 10),
-          yesVotes,
+          yesVotes: parseInt(yesVotes, 10),
+          status,
+          periodDifference,
         });
       });
 

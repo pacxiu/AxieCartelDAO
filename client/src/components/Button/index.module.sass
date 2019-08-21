@@ -3,8 +3,8 @@
 
 .button
   color: #fff
-  background-color: accent
-  border: 1px solid accent
+  background-color: var(--accent-light)
+  border: 1px solid var(--accent-light)
   font-weight: 500
   font-size: pxToRem(17)
   letter-spacing: 0.05em
@@ -12,16 +12,16 @@
   text-transform: uppercase
   display: table
   margin: 0 auto
-  padding: .7em 1.5em .6em
+  padding: .65em 1.5em .65em
   border-radius: 2.5em
-  width: auto
+  min-width: 10em
   transition: all .3s ease-in-out
   cursor: pointer
   outline: none!important
 
   &:hover
     background-color: #fff
-    color: accent
+    color: var(--accent-light)
 
   &[disabled]
     color: #fff

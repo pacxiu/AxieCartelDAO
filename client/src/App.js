@@ -12,6 +12,7 @@ import Members from 'pages/Members';
 import Member from 'pages/Member';
 import Proposals from 'pages/Proposals';
 import Proposal from 'pages/Proposal';
+import ProposalNew from 'pages/ProposalNew';
 import NotFound from 'pages/NotFound';
 import LoadingScreen from 'pages/LoadingScreen'
 
@@ -73,6 +74,7 @@ class App extends Component {
                   <Route path="/members/" component={Members} />
                   <Route path="/proposals" component={Proposals} />
                   <Route path="/proposal/:id" exact component={Proposal} />
+                  <Route path="/proposal-new" exact component={ProposalNew} />
                   <Route path="/" exact component={Home} />
                   <Route path="/" component={NotFound} />
                 </Switch>

@@ -1,21 +1,19 @@
 @import 'assets/styles/functions.module.sass'
 
 .proposal
-  p
-    margin-bottom: 0
+  width: pxToRem(400)
 
   &:hover
     background: var(--accent-dark)
     color: var(--font-color)
 
-.data
-  display: flex
-
-  &Item
-    text-align: center
-    
-    &:first-child
-      margin-right: 1.5em
+  &Title
+    font-weight: bold
+    font-size: 1.1em
+    margin: 0.35em auto
+  
+  &Timer
+    margin-bottom: 0
 
 .nav
   width: 100%
@@ -42,6 +40,34 @@
       width: 0
       height: 1px
       transition: 0.3s ease-in-out
+
+.votes
+  &Container
+    display: flex
+    flex-wrap: wrap
+    justify-content: space-between
+    margin: pxToRem(25) auto
+  
+  &Bar
+    width: 100%
+    display: flex
+    align-items: center
+    border-radius: 2px
+    overflow: hidden
+
+    &Fill
+      height: pxToRem(4)
+      background: var(--c-picton-blue)
+
+    &Yes
+      background: var(--c-cyan)
+
+  &Count
+    color: var(--c-picton-blue)
+    font-weight: bold
+
+  &Yes
+    color: var(--c-cyan)
 
 .active:after
   width: 100%

@@ -1,14 +1,40 @@
-@value accent from 'assets/styles/variables.module.sass'
+@import 'assets/styles/functions.module.sass'
 
-.decks
-  display: flex
-  flex-wrap: wrap
-  justify-content: center
+.proposal
+  width: pxToRem(400)
 
-.deck
-  text-align: center
-  max-width: 20rem
-  margin: 0 1rem
+  &Title
+    font-weight: bold
+    font-size: 1.1em
+    margin: 0.35em auto
+  
+  &Timer
+    margin-bottom: 0
 
-  &Img
-    max-width: 100%
+.votes
+  &Container
+    display: flex
+    flex-wrap: wrap
+    justify-content: space-between
+    margin: pxToRem(25) auto
+  
+  &Bar
+    width: 100%
+    display: flex
+    align-items: center
+    border-radius: 2px
+    overflow: hidden
+
+    &Fill
+      height: pxToRem(4)
+      background: var(--c-picton-blue)
+
+    &Yes
+      background: var(--c-cyan)
+
+  &Count
+    color: var(--c-picton-blue)
+    font-weight: bold
+
+  &Yes
+    color: var(--c-cyan)
