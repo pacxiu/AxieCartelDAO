@@ -1,8 +1,9 @@
 @value tablet, accent-light, overlay, accent-hover from '../../assets/styles/variables.module.sass'
+@import 'assets/styles/functions.module.sass'
 
 .modal
   outline: none
-  background-color: #fff
+  background-color: var(--accent-dark)
   width: auto
   max-width: 75rem
   min-width: 40rem
@@ -36,16 +37,16 @@
     cursor: pointer
 
     &:before, &:after
-      background-color: accent-hover
+      background-color: var(--accent-light)
 
   &:before, &:after
     position: absolute
     content: ' '
     left: 1.1rem
-    height: 1.9rem
-    width: 0.2rem
+    height: pxToRem(25)
+    width: pxToRem(3)
     min-width: 3px
-    background-color: #bfbfbf
+    background-color: var(--font-color)
     transition: 0.3s ease-in-out
 
   &:before

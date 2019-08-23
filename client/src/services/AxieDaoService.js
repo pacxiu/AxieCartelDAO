@@ -152,8 +152,9 @@ export const canRagequit = async (lastVote) => {
 
 // INTERACT WITH CONTRACT
 // TO DO: rework encodePayload and tx repetetive stuff
-export const submitVote = async (from, proposalIndex, uintVote, encodedPayload) => {
-  let { AxieDao } = store.getState().contracts;
+export const submitVote = async (proposalIndex, uintVote, encodedPayload) => {
+  const { contracts, user: { address } } = store.getState();
+  let { AxieDao } = contracts;
 
   if (!AxieDao) {
     AxieDao = await initContract();
@@ -168,7 +169,7 @@ export const submitVote = async (from, proposalIndex, uintVote, encodedPayload) 
 
   const vote = AxieDao.methods
     .submitVote(proposalIndex, uintVote)
-    .send({ from })
+    .send({ from: address })
     .once('transactionHash', txHash => console.info(txHash))
     .then(resp => resp)
     .catch((err) => {
@@ -202,8 +203,9 @@ export const rageQuit = async (from, amount, encodedPayload) => {
   return rage;
 };
 
-export const processProposal = async (from, id, encodedPayload) => {
-  let { AxieDao } = store.getState().contracts;
+export const processProposal = async (id, encodedPayload) => {
+  const { contracts, user: { address } } = store.getState();
+  let { AxieDao } = contracts;
 
   if (!AxieDao) {
     AxieDao = await initContract();
@@ -216,7 +218,7 @@ export const processProposal = async (from, id, encodedPayload) => {
 
   const processedProposal = AxieDao.methods
     .processProposal(id)
-    .send({ from })
+    .send({ from: address })
     .once('transactionHash', txHash => console.info(txHash))
     .then(resp => resp)
     .catch((err) => {

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -7,9 +7,66 @@ import styles from './index.module.sass';
 
 import { FullHeight, Container } from 'components/Layout';
 import Loader from 'components/Loader';
+import Button from 'components/Button';
+import Modal from 'components/Modal';
 import { ErrorDesc, Contribution } from 'components/Typography';
 
-import { getMemberData } from 'services/AxieDaoService';
+import { getMemberData, rageQuit, canRagequit } from 'services/AxieDaoService';
+
+const MemberData = ({
+  member: {
+    address,
+    shares,
+    tribute,
+    delegateKey,
+    exists,
+    canRageQuit,
+  },
+}) => {
+  const [modalOpen, toggleModal] = useState(false);
+
+  return (
+    <div className={styles.member}>
+      <div className={styles.memberDetails}>
+        <p className={styles.title}>Address</p>
+        <i>{address}</i>
+        <Contribution
+          shares={shares}
+          tribute={tribute}
+          className={styles.contribution}
+        />
+        <p className={styles.title}>Delegate Key</p>
+        <i>{delegateKey}</i>
+      </div>
+      <div>
+        {exists
+          ? (
+            <React.Fragment>
+              exists
+            </React.Fragment>
+          )
+          : (
+            <React.Fragment>
+              <Button onClick={() => toggleModal(true)}>
+                Rage Quit
+              </Button>
+            </React.Fragment>
+          )
+        }
+        <Link to="/proposal-new">
+          <Button>New Proposal</Button>
+        </Link>
+      </div>
+      <Modal
+        onClose={() => toggleModal(false)}
+        isOpen={modalOpen}
+      >
+        {canRageQuit ? 'Can' : 'Cant'}
+        {shares}
+      </Modal>
+    </div>
+  );
+};
 
 class Member extends Component {
   state = {
@@ -31,7 +88,11 @@ class Member extends Component {
         console.log(memberData);
       } else {
         memberData = await getMemberData(address);
+        memberData.address = address;
       }
+
+      const canRage = await canRagequit(memberData.highestIndexYesVote);
+      memberData.canRageQuit = canRage;
 
       this.setState({ memberData });
     } catch (error) {
@@ -47,19 +108,7 @@ class Member extends Component {
         <Container>
           {memberData
             ? memberData !== 'error'
-              ? (
-                <React.Fragment>
-                  <p className={styles.title}>Address</p>
-                  <i>{this.props.match.params.address}</i>
-                  <Contribution
-                    shares={memberData.shares}
-                    tribute={memberData.tribute}
-                    className={styles.contribution}
-                  />
-                  <p className={styles.title}>Delegate Key</p>
-                  <i>{memberData.delegateKey}</i>
-                </React.Fragment>
-              )
+              ? <MemberData member={memberData} />
               : <ErrorDesc>There was an error fetching data from blockchain.</ErrorDesc>
             : <Loader />
           }

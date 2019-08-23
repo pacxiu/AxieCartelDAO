@@ -12,7 +12,7 @@ import Countdown from 'components/Countdown';
 import { Contribution } from 'components/Typography';
 
 import { convertTitle, ProposalStatus } from 'shared/proposals';
-import { getAllProposalsData } from 'services/AxieDaoService';
+import { getAllProposalsData, processProposal, submitVote } from 'services/AxieDaoService';
 
 const ProposalData = ({
   proposal: {
@@ -51,12 +51,33 @@ const ProposalData = ({
     </div>
     {status === ProposalStatus.VOTING
       ? (
-        <div>
-          <Button>Vote Yes</Button>
-          <Button>Vote No</Button>
+        <div className={styles.buttons}>
+          <Button
+            className={styles.button}
+            onClick={() => submitVote(id, 2)}
+          >
+            Vote No
+          </Button>
+          <Button
+            className={styles.button}
+            onClick={() => submitVote(id, 1)}
+          >
+            Vote Yes
+          </Button>
         </div>
       )
-      : null
+      : status === ProposalStatus.READY_FOR_PROCESSING
+        ? (
+          <div className={styles.buttons}>
+            <Button
+              className={styles.button}
+              onClick={() => processProposal(id)}
+            >
+              Process
+            </Button>
+          </div>
+        )
+        : null
     }
   </div>
 );

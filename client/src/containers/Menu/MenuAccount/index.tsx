@@ -90,7 +90,7 @@ class MenuAccount extends Component<MenuAccountProps> {
                 )
               }
               <div className={styles.dropdown}>
-                <TextEllipsis><Link to={`/profile/${address}`}>{nickname || address }</Link></TextEllipsis>
+                <TextEllipsis><Link to={`/member/${address}`}>{nickname || address }</Link></TextEllipsis>
                 <div className={styles.dropdownContent}>
                   <div className={styles.dropdownButton} role="presentation" onClick={this.changeNick}>Change Nick</div>
                 </div>
@@ -108,7 +108,9 @@ class MenuAccount extends Component<MenuAccountProps> {
             </React.Fragment>
           )
         }
-        <Tooltip className={styles.tooltip} id="login-tip" place="bottom" border />
+        {
+          // <Tooltip className={styles.tooltip} id="login-tip" place="bottom" border />
+        }
       </div>
     );
   }
