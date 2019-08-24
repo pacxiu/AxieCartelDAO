@@ -59,9 +59,14 @@ class App extends Component {
 
   render() {
     const { initialized } = this.props;
+     let basename = '';
+
+    if (process.env.NODE_ENV === 'production') {
+      basename = 'PROJECTS/DAO';
+    }
 
     return (
-      <Router>
+      <Router basename={basename}>
         <Route render={({ location }) => (
           <div id="app">
             <NotificationsList />
