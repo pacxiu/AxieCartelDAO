@@ -1,0 +1,30 @@
+@import 'assets/styles/functions.module.sass'
+
+.loader
+  display: table
+  content: ''
+  position: absolute
+  animation: loading 0.8s linear infinite
+  width: pxToRem(110)
+  height: pxToRem(110)
+  border-radius: 50%
+  box-shadow: 0 3px 0 0 var(--accent-dark)
+  transform-origin: 50% 50%
+  margin: pxToRem(20) auto
+  top: calc(50% - #{pxToRem(70)})
+  left: calc(50% - #{pxToRem(55)})
+
+  &Container
+    position: relative
+    text-align: center
+
+  &Img
+    max-width: pxToRem(80)
+
+@keyframes loading
+  0%
+    transform: rotate(0deg)
+  50%
+    transform: rotate(180deg)
+  100%
+    transform: rotate(360deg)

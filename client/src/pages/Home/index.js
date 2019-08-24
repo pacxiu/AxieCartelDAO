@@ -8,11 +8,13 @@ import styles from './index.module.sass';
 import { FullHeight, Container } from 'components/Layout';
 import Button from 'components/Button';
 import Loader from 'components/Loader';
+import Particles from 'components/Particles';
 import { WithDaiIcon } from 'components/Icons';
 
 const Home = ({ general }) => (
   <FullHeight className={classnames(styles.container, styles.custom)}>
     <Container>
+      <Particles className={styles.particles} />
       <h1 className={styles.title}>Axie Cartel Dao</h1>
       <h2 className={styles.subtitle}>Where dev dreams come true.</h2>
       <div className={styles.dataContainer}>

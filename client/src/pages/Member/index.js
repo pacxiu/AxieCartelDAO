@@ -8,7 +8,8 @@ import styles from './index.module.sass';
 import { FullHeight, Container } from 'components/Layout';
 import Loader from 'components/Loader';
 import Button from 'components/Button';
-import Modal from 'components/Modal';
+import RageQuit from 'components/RageQuit';
+import NewProposal from 'components/NewProposal';
 import { ErrorDesc, Contribution } from 'components/Typography';
 
 import { getMemberData, rageQuit, canRagequit } from 'services/AxieDaoService';
@@ -22,8 +23,10 @@ const MemberData = ({
     exists,
     canRageQuit,
   },
+  currentUser,
 }) => {
-  const [modalOpen, toggleModal] = useState(false);
+  const [rageQuitOpen, toggleRageQuit] = useState(false);
+  const [newProposalOpen, toggleNewProposal] = useState(false);
 
   return (
     <div className={styles.member}>
@@ -38,32 +41,48 @@ const MemberData = ({
         <p className={styles.title}>Delegate Key</p>
         <i>{delegateKey}</i>
       </div>
-      <div>
-        {exists
-          ? (
-            <React.Fragment>
-              exists
-            </React.Fragment>
-          )
-          : (
-            <React.Fragment>
-              <Button onClick={() => toggleModal(true)}>
-                Rage Quit
+      {currentUser === address
+        ? (
+          <React.Fragment>
+            <div className={styles.buttonsContainer}>
+              {exists
+                ? (
+                  <React.Fragment>
+                    exists
+                  </React.Fragment>
+                )
+                : (
+                  <React.Fragment>
+                    <Button
+                      className={classnames(styles.button, styles.rage)}
+                      onClick={() => toggleRageQuit(true)}
+                    >
+                      Rage Quit
+                    </Button>
+                  </React.Fragment>
+                )
+              }
+              <Button
+                className={styles.button}
+                onClick={() => toggleNewProposal(true)}
+              >
+                New Proposal
               </Button>
-            </React.Fragment>
-          )
-        }
-        <Link to="/proposal-new">
-          <Button>New Proposal</Button>
-        </Link>
-      </div>
-      <Modal
-        onClose={() => toggleModal(false)}
-        isOpen={modalOpen}
-      >
-        {canRageQuit ? 'Can' : 'Cant'}
-        {shares}
-      </Modal>
+            </div>
+            <RageQuit
+              onClose={() => toggleRageQuit(false)}
+              isOpen={rageQuitOpen}
+              {...{ shares, currentUser }}
+            />
+            <NewProposal
+              onClose={() => toggleNewProposal(false)}
+              isOpen={newProposalOpen}
+              {...{ currentUser }}
+            />
+          </React.Fragment>
+        )
+        : null
+      }
     </div>
   );
 };
@@ -77,6 +96,12 @@ class Member extends Component {
     this.loadMemberData();
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.match.params.address !== this.props.match.params.address) {
+      this.loadMemberData();
+    }
+  }
+
   loadMemberData = async () => {
     const { membersData, match } = this.props;
     const { address } = match.params;
@@ -85,7 +110,11 @@ class Member extends Component {
     try {
       if (membersData) {
         memberData = membersData.find(member => member.address === address);
-        console.log(memberData);
+
+        if (!memberData) {
+          memberData = await getMemberData(address);
+          memberData.address = address;
+        }
       } else {
         memberData = await getMemberData(address);
         memberData.address = address;
@@ -102,13 +131,14 @@ class Member extends Component {
 
   render() {
     const { memberData } = this.state;
+    const { address } = this.props;
 
     return (
       <FullHeight className={classnames(styles.container, styles.custom)}>
         <Container>
           {memberData
             ? memberData !== 'error'
-              ? <MemberData member={memberData} />
+              ? <MemberData member={memberData} currentUser={address} />
               : <ErrorDesc>There was an error fetching data from blockchain.</ErrorDesc>
             : <Loader />
           }
@@ -118,8 +148,16 @@ class Member extends Component {
   }
 }
 
-const mapStateToProps = ({ daoData: { membersData } }) => ({
+const mapStateToProps = ({
+  daoData: {
+    membersData,
+  },
+  user: {
+    address,
+  },
+}) => ({
   membersData,
+  address,
 });
 
 export default connect(mapStateToProps)(Member);
