@@ -34,7 +34,7 @@ const ProposalCard = ({
     didPass,
   },
 }) => (
-  <Card className={styles.proposal}>
+  <Card className={styles.proposal} link={`/proposal/${id}`}>
     <Countdown {...{ periodDifference, status, didPass, className: styles.proposalTimer }} />
     <p className={styles.proposalTitle}>{convertTitle(details, id)}</p>
     <Contribution
@@ -55,9 +55,6 @@ const ProposalCard = ({
         />
       </div>
     </div>
-    <Link to={`/proposal/${id}`}>
-      <Button>View</Button>
-    </Link>
   </Card>
 );
 

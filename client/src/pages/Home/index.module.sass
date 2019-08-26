@@ -1,22 +1,36 @@
 @import 'assets/styles/functions.module.sass'
 
-.container
+.fullHeight
   text-align: center
   position: relative
 
+.container
+  position: relative
+  z-index: 1
+
+.particles
+  > div
+    position: absolute
+    top: 0
+    left: 0
+    right: 0
+    bottom: 0
+
 .title
   font-weight: 900
-  font-size: pxToRem(40)
+  font-size: pxToRem(44)
   margin-bottom: 0.2em
 
 .subtitle
   font-size: pxToRem(20)
   margin-top: 0
   font-weight: normal
+  line-height: 1.55em
 
 .data
   &Container
-    margin-top: pxToRem(70)
+    margin-top: 1.5em
+    margin-bottom: 2em
 
   &Title
     font-size: pxToRem(15)
@@ -36,10 +50,9 @@
 .sharesValue
   font-size: 1.2em
 
-.particles
-  > div
-    position: absolute
-    top: pxToRem(90)
-    left: pxToRem(50)
-    right: pxToRem(50)
-    bottom: pxToRem(50)
+.manifesto
+  &Hint
+    margin-bottom: 0.75em
+
+  &Container
+    margin-top: 2em

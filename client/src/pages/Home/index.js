@@ -12,17 +12,20 @@ import Particles from 'components/Particles';
 import { WithDaiIcon } from 'components/Icons';
 
 const Home = ({ general }) => (
-  <FullHeight className={classnames(styles.container, styles.custom)}>
-    <Container>
-      <Particles className={styles.particles} />
+  <FullHeight className={styles.fullHeight}>
+    <Particles className={styles.particles} />
+    <Container className={styles.container}>
       <h1 className={styles.title}>Axie Cartel Dao</h1>
-      <h2 className={styles.subtitle}>Where dev dreams come true.</h2>
+      <h2 className={styles.subtitle}>
+        Do you have idea for Axie Infinity based project? You name it, we fund it.<br />
+        Open for all: writers, designers, developers.
+      </h2>
       <div className={styles.dataContainer}>
         {general
           ? (
             <React.Fragment>
               <p className={styles.bankValue}>
-                <span className={styles.dataTitle}>Bank</span>
+                <span className={styles.dataTitle}>Funds</span>
                 <WithDaiIcon>
                   {parseFloat(general.bank).toFixed(2)}
                 </WithDaiIcon>
@@ -38,6 +41,10 @@ const Home = ({ general }) => (
                     {parseFloat(general.bank / general.shares).toFixed(2)}
                   </WithDaiIcon>
                 </p>
+              </div>
+              <div className={styles.manifestoContainer}>
+                <p className={styles.manifestoHint}>To learn more read our:</p>
+                <Button className={styles.button}>Manifesto</Button>
               </div>
             </React.Fragment>
           )
