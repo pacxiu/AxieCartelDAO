@@ -23,7 +23,7 @@
   align-items: center
 
   img
-    max-height: calc(nav-height * 0.8)
+    max-height: calc(nav-height * 0.85)
     margin-right: pxToRem(10)
 
 .menu
@@ -34,7 +34,33 @@
     margin-bottom: 0
 
   &Item
-    margin: 0 2rem
+    margin: 0 1.5rem
+
+    &Link
+      display: flex
+      flex-direction: column
+      align-items: center
+
+    &Icon
+      width: pxToRem(40)
+      height: auto
+
+      *
+        fill: var(--font-color)
+        transition: 0.3s ease-in-out
+
+    &Title
+      font-size: pxToRem(12)
+      margin-top: 0.2em
+      transition: 0.3s ease-in-out
+
+    &:hover
+      .menuItem
+        &Icon *
+          fill: var(--accent-light)
+
+        &Title
+          color: var(--accent-light)
 
 .right
   display: flex

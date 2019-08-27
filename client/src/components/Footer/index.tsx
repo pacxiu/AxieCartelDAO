@@ -7,7 +7,7 @@ import { ReactComponent as DiscordIcon } from 'assets/icons/discord.svg';
 import { ReactComponent as TwitterIcon } from 'assets/icons/twitter.svg';
 
 const Footer = () => (
-  <footer className={styles.container} >
+  <footer className={styles.footer} >
     <div className={styles.footerNav}>
       <ul className={styles.footerList}>
         <span className={styles.footerListTitle}>Articles</span>
@@ -22,6 +22,7 @@ const Footer = () => (
       </div>
     </div>
     <p>&copy;&nbsp;{new Date().getFullYear()}&nbsp;AxieCartelDAO</p>
+    <p className={styles.credentials}>Icons design <a href="https://www.flaticon.com/" title="Flaticon" target="_blank">www.flaticon.com</a></p>
   </footer>
 );
 

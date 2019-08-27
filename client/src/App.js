@@ -14,6 +14,8 @@ import Proposals from 'pages/Proposals';
 import Proposal from 'pages/Proposal';
 import NotFound from 'pages/NotFound';
 import LoadingScreen from 'pages/LoadingScreen'
+import Manifesto from 'pages/Manifesto'
+import Team from 'pages/Team'
 
 import Footer from 'components/Footer';
 
@@ -74,6 +76,8 @@ class App extends Component {
             {initialized
               ? (
                 <Switch>
+                  <Route path="/manifesto" component={Manifesto} />
+                  <Route path="/team" component={Team} />
                   <Route path="/member/:address" component={Member} />
                   <Route path="/members/" component={Members} />
                   <Route path="/proposals" component={Proposals} />

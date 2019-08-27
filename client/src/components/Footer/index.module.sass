@@ -1,4 +1,6 @@
-.container
+@import 'assets/styles/functions.module.sass'
+
+.footer
   padding: 2rem
   text-align: center
   font-size: 0.85em
@@ -19,11 +21,11 @@
       display: inline-block
       margin-bottom: 0.5em
 
-    a
-      transition: 0.3s ease-in-out
+  a
+    transition: 0.3s ease-in-out
 
-      &:hover
-        color: var(--accent-light)
+    &:hover
+      color: var(--accent-light)
 
 .social
   display: flex
@@ -44,3 +46,6 @@
     &:hover path
       fill: var(--accent-light)
 
+.credentials
+  margin-bottom: 0
+  font-size: pxToRem(12)
