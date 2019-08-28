@@ -104,7 +104,7 @@ class MenuAccount extends Component<MenuAccountProps> {
                 data-tip="You are not logged in.<br />Some features will not be available for use. Please enable Metamask and then log in."
                 className={classnames(styles.login, styles.in)}
               />
-              <span>LOG IN</span>
+              <span>No wallet</span>
             </React.Fragment>
           )
         }

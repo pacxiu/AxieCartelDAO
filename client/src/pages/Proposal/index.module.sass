@@ -1,6 +1,8 @@
 @import 'assets/styles/functions.module.sass'
 
 .proposal
+  max-width: pxToRem(400)
+
   &Title
     font-weight: bold
     font-size: 1.1em
@@ -10,6 +12,10 @@
     margin-bottom: 0
 
 .votes
+  &Title
+    width: 100%
+    margin-bottom: 0
+
   &Container
     display: flex
     flex-wrap: wrap
@@ -41,7 +47,7 @@
   display: flex
   width: 100%
   justify-content: space-between
-  margin-top: pxToRem(80)
+  margin-top: pxToRem(60)
 
   .button
     margin: 0

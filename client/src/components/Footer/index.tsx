@@ -16,8 +16,8 @@ const Footer = () => (
       <div>
         <span className={styles.footerListTitle}>Social</span>
         <ul className={classnames(styles.footerList, styles.social)}>
-          <li><a href=""><TwitterIcon /></a></li>
-          <li><a href=""><DiscordIcon /></a></li>
+          <li><a href="https://twitter.com/AxieCartelDAO" target="_blank"><TwitterIcon /></a></li>
+          <li><a href="https://discord.gg/PMa7PRF" target="_blank"><DiscordIcon /></a></li>
         </ul>
       </div>
     </div>

@@ -33,7 +33,7 @@ const MENU_ITEMS = [
   { link: '/proposals', icon: ProposalsIcon, title: 'Proposals'},
   { link: '/members', icon: MembersIcon, title: 'Members'},
   { link: '/manifesto', icon: ManifestoIcon, title: 'Manifesto'},
-  { link: '/team', icon: TeamIcon, title: 'Team'},
+  { link: '/founders', icon: TeamIcon, title: 'Founders'},
 ];
 
 class Menu extends Component<MenuProps, MenuState> {

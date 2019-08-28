@@ -34,7 +34,7 @@
     margin-bottom: 0
 
   &Item
-    margin: 0 1.5rem
+    margin: 0 pxToRem(30)
 
     &Link
       display: flex
@@ -42,25 +42,26 @@
       align-items: center
 
     &Icon
-      width: pxToRem(40)
+      width: pxToRem(50)
       height: auto
 
       *
-        fill: var(--font-color)
+        fill: var(--accent-light)
         transition: 0.3s ease-in-out
 
     &Title
-      font-size: pxToRem(12)
+      font-size: pxToRem(13)
       margin-top: 0.2em
       transition: 0.3s ease-in-out
+      color: var(--accent-light)
 
     &:hover
       .menuItem
         &Icon *
-          fill: var(--accent-light)
+          fill: var(--font-color)
 
         &Title
-          color: var(--accent-light)
+          color: var(--font-color)
 
 .right
   display: flex

@@ -9,7 +9,7 @@ import { FullHeight, Container } from 'components/Layout';
 import Loader from 'components/Loader';
 import Button from 'components/Button';
 import Countdown from 'components/Countdown';
-import { Contribution } from 'components/Typography';
+import { Contribution } from 'components/Card';
 
 import { convertTitle, ProposalStatus } from 'shared/proposals';
 import { getAllProposalsData, processProposal, submitVote } from 'services/AxieDaoService';
@@ -36,6 +36,7 @@ const ProposalData = ({
       tribute={tokenTribute}
     />
     <div className={styles.votesContainer}>
+      <p className={styles.votesTitle}>Votes:</p>
       <span className={classnames(styles.votesCount, styles.votesNo)}>{noVotes}</span>
       <span className={classnames(styles.votesCount, styles.votesYes)}>{yesVotes}</span>
       <div className={styles.votesBar}>
@@ -119,7 +120,6 @@ class Proposal extends Component {
     return (
       <FullHeight
         className={classnames(styles.container, styles.custom)}
-        start={proposalData && proposalData !== 'error'}
       >
         <Container>
           {proposalData

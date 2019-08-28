@@ -10,7 +10,8 @@ import Loader from 'components/Loader';
 import Button from 'components/Button';
 import RageQuit from 'components/RageQuit';
 import NewProposal from 'components/NewProposal';
-import { ErrorDesc, Contribution } from 'components/Typography';
+import { ErrorDesc } from 'components/Typography';
+import { Contribution } from 'components/Card';
 
 import { getMemberData, rageQuit, canRagequit } from 'services/AxieDaoService';
 

@@ -9,8 +9,7 @@ import { FullHeight, Container } from 'components/Layout';
 import Button from 'components/Button';
 import Loader from 'components/Loader';
 import Countdown from 'components/Countdown';
-import Card, { CardsContainer } from 'components/Card';
-import { Contribution } from 'components/Typography';
+import Card, { CardsContainer, Contribution } from 'components/Card';
 
 import { ProposalStatus, convertTitle } from 'shared/proposals';
 import { getAllProposalsData, getCurrentPeriod } from 'services/AxieDaoService';
@@ -42,16 +41,17 @@ const ProposalCard = ({
       tribute={tokenTribute}
     />
     <div className={styles.votesContainer}>
+      <p className={styles.votesTitle}>Votes:</p>
       <span className={classnames(styles.votesCount, styles.votesNo)}>{noVotes}</span>
       <span className={classnames(styles.votesCount, styles.votesYes)}>{yesVotes}</span>
       <div className={styles.votesBar}>
         <div
           className={classnames(styles.votesBarFill, styles.votesBarNo)}
-          style={{ width: `${noVotes / (noVotes + yesVotes) * 100}%` }}
+          style={{ width: (noVotes + yesVotes) !== 0 ? `${noVotes / (noVotes + yesVotes) * 100}%` : '50%' }}
         />
         <div
           className={classnames(styles.votesBarFill, styles.votesBarYes)}
-          style={{ width: `${yesVotes / (noVotes + yesVotes) * 100}%` }}
+          style={{ width: (noVotes + yesVotes) !== 0 ? `${yesVotes / (noVotes + yesVotes) * 100}%` : '50%' }}
         />
       </div>
     </div>

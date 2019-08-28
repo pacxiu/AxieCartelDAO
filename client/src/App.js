@@ -1,29 +1,14 @@
 import React, { Component } from 'react';
 import { hot } from 'react-hot-loader';
 import { connect } from 'react-redux';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-
-// import components and containers
-import Menu from 'containers/Menu';
-import NotificationsList from 'containers/NotificationsList';
-
-import Home from 'pages/Home';
-import Members from 'pages/Members';
-import Member from 'pages/Member';
-import Proposals from 'pages/Proposals';
-import Proposal from 'pages/Proposal';
-import NotFound from 'pages/NotFound';
-import LoadingScreen from 'pages/LoadingScreen'
-import Manifesto from 'pages/Manifesto'
-import Team from 'pages/Team'
-
-import Footer from 'components/Footer';
 
 import { setToken, setUserData } from 'duck/user';
 import { createRequest } from 'shared/helpers';
 
 import { initWeb3 } from 'services/Web3Service';
 import { getAllEvents } from 'services/AxieDaoService';
+
+import Routes from 'Routes';
 
 class App extends Component {
   componentDidMount() {
@@ -68,30 +53,7 @@ class App extends Component {
     }
 
     return (
-      <Router basename={basename}>
-        <Route render={({ location }) => (
-          <div id="app">
-            <NotificationsList />
-            <Menu />
-            {initialized
-              ? (
-                <Switch>
-                  <Route path="/manifesto" component={Manifesto} />
-                  <Route path="/team" component={Team} />
-                  <Route path="/member/:address" component={Member} />
-                  <Route path="/members/" component={Members} />
-                  <Route path="/proposals" component={Proposals} />
-                  <Route path="/proposal/:id" exact component={Proposal} />
-                  <Route path="/" exact component={Home} />
-                  <Route path="/" component={NotFound} />
-                </Switch>
-              )
-              : <LoadingScreen />
-            }
-            <Footer {...{ location }} />
-          </div>)}
-        />
-      </Router>
+      <Routes {...{ basename, initialized }} />
     );
   }
 }

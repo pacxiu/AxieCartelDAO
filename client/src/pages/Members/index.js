@@ -7,9 +7,8 @@ import styles from './index.module.sass';
 import { FullHeight, Container } from 'components/Layout';
 import Button from 'components/Button';
 import Loader from 'components/Loader';
-import Card, { CardsContainer } from 'components/Card';
+import Card, { CardsContainer, Contribution } from 'components/Card';
 import TextEllipsis from 'components/TextEllipsis';
-import { Contribution } from 'components/Typography';
 
 import { getAllMembersData } from 'services/AxieDaoService';
 

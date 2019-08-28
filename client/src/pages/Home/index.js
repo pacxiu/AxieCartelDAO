@@ -44,7 +44,9 @@ const Home = ({ general }) => (
               </div>
               <div className={styles.manifestoContainer}>
                 <p className={styles.manifestoHint}>To learn more read our:</p>
-                <Button className={styles.button}>Manifesto</Button>
+                <Link to="/manifesto">
+                  <Button className={styles.button}>Manifesto</Button>
+                </Link>
               </div>
             </React.Fragment>
           )
