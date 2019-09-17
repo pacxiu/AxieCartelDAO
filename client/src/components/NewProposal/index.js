@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import ParticlesLib from 'react-particles-js';
 
 import classnames from 'classnames';
 import styles from './index.module.sass';
@@ -30,7 +29,7 @@ const NewProposal = ({
       sharesRequested,
       details,
     );
-  }
+  };
 
   return (
     <Modal
@@ -89,5 +88,6 @@ const NewProposal = ({
       </form>
     </Modal>
   );
-}
+};
+
 export default NewProposal;

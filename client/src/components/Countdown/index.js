@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { ProposalStatus } from 'shared/proposals';
 
 const periodsToTime = (periods, status, didPass, periodDuration = 17280) => {
+  if (status === ProposalStatus.READY_FOR_PROCESSING) {
+    return 'Ready for processing';
+  }
+
   if (periods < 0) {
     if (didPass) {
       return 'Passed';

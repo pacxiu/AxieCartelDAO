@@ -5,9 +5,13 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
+require('./lib/db');
+
 app.use(bodyParser.json());
 // server production assets like css, images, js
 app.use(express.static('client/build'));
+
+require('./routes/proposalsRoutes')(app);
 
 // if route is not recognized server index.html
 app.get('*', (req, res) => {
