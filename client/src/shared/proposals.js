@@ -3,6 +3,7 @@ export const ProposalStatus = {
   GRACE: 'GRACE',
   COMPLETED: 'COMPLETED',
   READY_FOR_PROCESSING: 'READY_FOR_PROCESSING',
+  CAN_ABORT: 'CAN_ABORT',
 };
 
 export const convertTitle = (title, id) => {

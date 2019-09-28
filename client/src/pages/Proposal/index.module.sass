@@ -43,11 +43,64 @@
   &Yes
     color: var(--c-cyan)
 
+.applicant
+  font-weight: bold
+  margin-bottom: 0
+
 .buttons
   display: flex
   width: 100%
   justify-content: space-between
-  margin-top: pxToRem(60)
+  margin-top: pxToRem(40)
 
   .button
+    margin: 0
+    background: var(--c-picton-blue)
+    border-color: var(--c-picton-blue)
+
+    &:hover
+      background: transparent
+      color: var(--c-picton-blue)
+
+      path
+        fill: var(--c-picton-blue)
+
+  .yes
+    background: var(--c-cyan)
+    border-color: var(--c-cyan)
+    color: var(--dark-bg)
+
+    &:hover
+      color: var(--c-cyan)
+
+      path
+        fill: var(--c-cyan)
+
+    path
+      fill: var(--dark-bg)
+    
+  svg
+    max-width: 1.5em
+    max-height: 1.5em
+
+  path
+    fill: var(--font-color)
+    transition: 0.3s ease-in-out
+
+.additional
+  margin-top: pxToRem(20)
+  font-size: 0.9em
+
+  .title
+    font-weight: bold
+    margin-bottom: 0
+
+  .link
+    margin-top: 0.5em
+    color: var(--accent-light)
+
+    &:hover
+      text-decoration: underline
+
+  p
     margin: 0

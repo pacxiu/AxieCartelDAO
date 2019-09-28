@@ -1,9 +1,9 @@
-@value tablet from 'assets/styles/variables.module.sass'
+@value tablet, overlay from 'assets/styles/variables.module.sass'
 @import 'assets/styles/functions.module.sass'
 
 .modal
   outline: none
-  background-color: var(--accent-dark)
+  background-color: var(--dark-bg)
   width: auto
   max-width: 75rem
   min-width: 40rem
@@ -11,6 +11,8 @@
   position: relative
   border-radius: 0.3rem
   padding: 2.5rem
+  border: 1px solid var(--font-color)
+  box-shadow: 0 0 7px -1px var(--font-color)
 
   &Overlay
     Overlay

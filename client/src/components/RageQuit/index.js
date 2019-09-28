@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import styles from './index.module.sass';
 
 import Modal from 'components/Modal';
-import Input from 'components/Input';
+import Input, { Label } from 'components/Input';
 import Button from 'components/Button';
 
 import { rageQuit } from 'services/AxieDaoService';
@@ -18,8 +18,11 @@ const RageQuitModal = ({
 
   return (
     <Modal {...{ onClose, isOpen }}>
+      <h2 className={styles.title}>Rage Quit</h2>
       <div className={styles.inputControl}>
+        <Label htmlFor="sharesQuit">Shares to quit</Label>
         <Input
+          id="sharesQuit"
           value={sharesQuit}
           max={shares}
           step={1}
@@ -27,11 +30,13 @@ const RageQuitModal = ({
           type="number"
           placeholder="Shares to quit"
         />
-        <p className={styles.hint}>Shares Owned: {shares}</p>
+        <p className={styles.hint}>Owned: {shares}</p>
       </div>
       <Button
+        white
         disabled={sharesQuit <= 0}
         onClick={() => rageQuit(currentUser, sharesQuit)}
+        className={styles.buttonSubmit}
       >
         Submit
       </Button>

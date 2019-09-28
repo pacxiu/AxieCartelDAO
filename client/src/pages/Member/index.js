@@ -47,7 +47,6 @@ class Member extends Component {
       const canRage = await canRagequit(memberData.highestIndexYesVote);
       memberData.canRageQuit = canRage;
 
-      console.log(memberData);
       this.setState({ memberData });
     } catch (error) {
       this.setState({ memberData: 'error' });

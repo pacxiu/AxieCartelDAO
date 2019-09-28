@@ -6,7 +6,7 @@ import Modal from 'components/Modal';
 import Input, { Label } from 'components/Input';
 import Button from 'components/Button';
 
-import { submitProposal } from 'services/AxieDaoService';
+import { submitProposal, getProposalQueueLength } from 'services/AxieDaoService';
 import { toU256 } from 'shared/contracts/utils';
 
 const NewProposal = ({
@@ -18,8 +18,10 @@ const NewProposal = ({
   const [tokenTribute, setTokenTribute] = useState(0);
   const [sharesRequested, setSharesRequested] = useState(0);
   const [details, setDetails] = useState('');
+  const [link, setLink] = useState('');
+  const [description, setDescription] = useState('');
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
 
     submitProposal(
@@ -28,6 +30,8 @@ const NewProposal = ({
       toU256(tokenTribute),
       sharesRequested,
       details,
+      link,
+      description,
     );
   };
 
@@ -79,7 +83,34 @@ const NewProposal = ({
             placeholder="Shares requested"
           />
         </div>
+        <div className={styles.additional}>
+          <h5>Additional Information</h5>
+          <div className={styles.inputControl}>
+            <Label htmlFor="proposalLink">Link</Label>
+            <Input
+              id="proposalLink"
+              value={link}
+              onChange={e => setLink(e.target.value)}
+              type="text"
+              placeholder="Link"
+            />
+          </div>
+          <div>
+            <Label htmlFor="proposalDescription">Description</Label>
+            <Input
+              id="proposalDescription"
+              value={description}
+              onChange={e => setDescription(e.target.value)}
+              type="text"
+              placeholder="Description"
+              as="textarea"
+              rows="3"
+              className={styles.textarea}
+            />
+          </div>
+        </div>
         <Button
+          white
           type="submit"
           className={styles.buttonSubmit}
         >

@@ -7,6 +7,8 @@ import { initContract as initWeb3Contract, fromWei } from 'services/Web3Service'
 import { balanceOf } from 'services/ApprovedTokenService';
 import { ProposalStatus } from 'shared/proposals';
 
+import { createRequest } from 'shared/helpers';
+
 // event SubmitProposal(uint256 proposalIndex, address indexed delegateKey, address indexed memberAddress, address indexed applicant, uint256 tokenTribute, uint256 sharesRequested);
 // event SubmitVote(uint256 indexed proposalIndex, address indexed delegateKey, address indexed memberAddress, uint8 uintVote);
 // event ProcessProposal(uint256 indexed proposalIndex, address indexed applicant, address indexed memberAddress, uint256 tokenTribute, uint256 sharesRequested, bool didPass);
@@ -104,6 +106,17 @@ export const getPeriodDuration = async () => {
   return periodDuration;
 };
 
+export const getAbortWindow = async () => {
+  let { AxieDao } = store.getState().contracts;
+
+  if (!AxieDao) {
+    AxieDao = await initContract();
+  }
+
+  const abortWindow = await AxieDao.methods.abortWindow().call();
+  return abortWindow;
+};
+
 // other data
 export const getTotalShares = async () => {
   let { AxieDao } = store.getState().contracts;
@@ -136,6 +149,17 @@ export const getProposalDeposit = async () => {
 
   const proposalDeposit = await AxieDao.methods.proposalDeposit().call();
   return proposalDeposit;
+};
+
+export const getProposalQueueLength = async () => {
+  let { AxieDao } = store.getState().contracts;
+
+  if (!AxieDao) {
+    AxieDao = await initContract();
+  }
+
+  const proposalQueueLength = await AxieDao.methods.getProposalQueueLength().call();
+  return proposalQueueLength;
 };
 
 // MODIFIERS
@@ -234,6 +258,8 @@ export const submitProposal = async (
   tokenTribute,
   sharesRequested,
   details,
+  link,
+  description,
   encodedPayload = false,
 ) => {
   let { AxieDao } = store.getState().contracts;
@@ -252,8 +278,16 @@ export const submitProposal = async (
   const proposal = await AxieDao.methods
     .submitProposal(applicant, tokenTribute, sharesRequested, details)
     .send({ from })
-    .once('transactionHash', txHash => console.info(txHash))
-    .then(resp => resp)
+    .once('transactionHash', async (txHash) => {
+      const totalProposals = await getProposalQueueLength();
+      createRequest('post', '/api/proposal', {
+        link,
+        description,
+        totalProposals,
+        issuer: from,
+        txHash,
+      });
+    })
     .catch((err) => {
       console.error(err);
       return { error: 'rejected transaction' };
@@ -268,9 +302,10 @@ const getGeneralData = async () => {
   // eslint-disable-next-line
   const bank = await balanceOf(contracts.GuildBank.address);
   // probably will not be dynamically changed
-  const gracePeriodLength = await getGracePeriodLength();
-  const votingPeriodLength = await getVotingPeriodLength();
-  const periodDuration = await getPeriodDuration();
+  const gracePeriodLength = parseInt(await getGracePeriodLength(), 10);
+  const votingPeriodLength = parseInt(await getVotingPeriodLength(), 10);
+  const periodDuration = parseInt(await getPeriodDuration(), 10);
+  const abortWindow = parseInt(await getAbortWindow(), 10);
 
   return {
     shares,
@@ -279,6 +314,7 @@ const getGeneralData = async () => {
     gracePeriodLength,
     votingPeriodLength,
     periodDuration,
+    abortWindow,
   };
 };
 
@@ -396,9 +432,10 @@ export const getAllMembersData = async () => {
 
 export const getAllProposalsData = async () => {
   const { proposals, general } = store.getState().daoData;
-  const { periodDuration, votingPeriodLength, gracePeriodLength, currentPeriod } = general;
-  const totalGracePeriod = votingPeriodLength + gracePeriodLength;
-  const { VOTING, GRACE, COMPLETED, READY_FOR_PROCESSING } = ProposalStatus;
+  const { votingPeriodLength, gracePeriodLength, currentPeriod, abortWindow } = general;
+  const canVote = votingPeriodLength;
+  const canGrace = canVote + gracePeriodLength;
+  const { VOTING, GRACE, COMPLETED, READY_FOR_PROCESSING, CAN_ABORT } = ProposalStatus;
 
   const proposalsDataRequest = [];
   const proposalsData = [];
@@ -428,17 +465,17 @@ export const getAllProposalsData = async () => {
         let status;
         let periodDifference;
 
-        if (proposalPeriodDifference < votingPeriodLength) {
-          periodDifference = votingPeriodLength - proposalPeriodDifference;
+        if (proposalPeriodDifference < canVote) {
+          periodDifference = canVote - proposalPeriodDifference;
           status = VOTING;
-        } else if (proposalPeriodDifference < totalGracePeriod) {
-          periodDifference = totalGracePeriod - proposalPeriodDifference;
+        } else if (proposalPeriodDifference < canGrace) {
+          periodDifference = canGrace - proposalPeriodDifference;
           status = GRACE;
         } else if (processed) {
-          periodDifference = totalGracePeriod - proposalPeriodDifference;
+          periodDifference = canGrace - proposalPeriodDifference;
           status = COMPLETED;
         } else {
-          periodDifference = totalGracePeriod - proposalPeriodDifference;
+          periodDifference = canGrace - proposalPeriodDifference;
           status = READY_FOR_PROCESSING;
         }
 

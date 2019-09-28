@@ -4,17 +4,41 @@ import classnames from 'classnames';
 import styles from './index.module.sass';
 
 import { FullHeight, Container } from 'components/Layout';
+import AnchorExternal from 'components/AnchorExternal';
+
+import ExhumanImage from 'assets/founders/Exhuman.png';
+import ClumsierImage from 'assets/founders/Clumsier.png';
+import YuurinImage from 'assets/founders/Yuurin.jpg';
 
 const Founders = () => (
-  <FullHeight start className={classnames(styles.container, styles.custom)}>
+  <FullHeight start className={classnames(styles.container, styles.page)}>
     <Container>
-      <h1 className={styles.title}>Founders</h1>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sit amet tellus at felis consectetur auctor sit amet ac odio. Nullam dignissim eu tellus et tincidunt. Morbi sollicitudin rutrum ex, id porttitor elit finibus consequat. Maecenas sed tincidunt lacus. Vestibulum molestie semper lorem in fringilla. Nulla finibus neque sem, ut aliquet est ornare nec. Suspendisse at tempus risus. Maecenas pulvinar felis vitae nibh fermentum, feugiat hendrerit augue tempor. Suspendisse sed ultricies ipsum, egestas pellentesque orci. Integer hendrerit lorem purus, vel dapibus lorem venenatis et. Aenean congue dignissim porttitor. Fusce tincidunt quam nisl. Donec vel nisi nisl.
-      </p>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sit amet tellus at felis consectetur auctor sit amet ac odio. Nullam dignissim eu tellus et tincidunt. Morbi sollicitudin rutrum ex, id porttitor elit finibus consequat. Maecenas sed tincidunt lacus. Vestibulum molestie semper lorem in fringilla. Nulla finibus neque sem, ut aliquet est ornare nec. Suspendisse at tempus risus. Maecenas pulvinar felis vitae nibh fermentum, feugiat hendrerit augue tempor. Suspendisse sed ultricies ipsum, egestas pellentesque orci. Integer hendrerit lorem purus, vel dapibus lorem venenatis et. Aenean congue dignissim porttitor. Fusce tincidunt quam nisl. Donec vel nisi nisl.
-      </p>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sit amet tellus at felis consectetur auctor sit amet ac odio. Nullam dignissim eu tellus et tincidunt. Morbi sollicitudin rutrum ex, id porttitor elit finibus consequat. Maecenas sed tincidunt lacus. Vestibulum molestie semper lorem in fringilla. Nulla finibus neque sem, ut aliquet est ornare nec. Suspendisse at tempus risus. Maecenas pulvinar felis vitae nibh fermentum, feugiat hendrerit augue tempor. Suspendisse sed ultricies ipsum, egestas pellentesque orci. Integer hendrerit lorem purus, vel dapibus lorem venenatis et. Aenean congue dignissim porttitor. Fusce tincidunt quam nisl. Donec vel nisi nisl.
-      </p>
+      <h1>Founders</h1>
+      <ul className={styles.listFounders}>
+        <li>
+          <img src={ExhumanImage} alt="Exhuman avatar" />
+        </li>
+        <li>
+          <img src={ClumsierImage} alt="Clumsier avatar" />
+        </li>
+        <li className={styles.yuurin}>
+          <img src={YuurinImage} alt="YuurinB avatar" />
+        </li>
+      </ul>
+      <ul className={styles.listFounders}>
+        <li>
+          <b>Summoner</b>
+          <p><AnchorExternal href="https://twitter.com/3xhuman">ExHuman</AnchorExternal></p>
+        </li>
+        <li>
+          <b>DAO First Dev</b>
+          <p>Clumsier</p>
+        </li>
+        <li>
+          <b>DAO Logo design</b>
+          <p><AnchorExternal href="https://twitter.com/YuurinB">YuurinBe</AnchorExternal></p>
+        </li>
+      </ul>
     </Container>
   </FullHeight>
 );

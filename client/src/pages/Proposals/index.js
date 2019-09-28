@@ -93,14 +93,15 @@ class Proposals extends React.Component {
 
   filterProposals = async () => {
     const { proposalsData } = this.props;
-    const { VOTING, GRACE, COMPLETED, READY_FOR_PROCESSING } = ProposalStatus;
+    const { VOTING, GRACE, COMPLETED, READY_FOR_PROCESSING, CAN_ABORT } = ProposalStatus;
 
     const proposals = {
       [VOTING]: [],
       [GRACE]: [],
       [COMPLETED]: [],
       [READY_FOR_PROCESSING]: [],
-    }
+      [CAN_ABORT]: [],
+    };
 
     proposalsData.forEach((proposal) => {
       proposals[proposal.status].push(proposal);

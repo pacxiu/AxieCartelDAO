@@ -1,7 +1,77 @@
 @value accent from 'assets/styles/variables.module.sass'
 @import 'assets/styles/functions.module.sass'
 
-.title
-  font-weight: 900
-  text-align: center
-  font-size: pxToRem(40)
+.page
+  max-width: 55em
+  margin: 0 auto
+  font-size: pxToRem(20)
+
+  h1
+    font-weight: 900
+    text-align: center
+    font-size: 2.15em
+    margin-bottom: 1.25em
+
+  p
+    margin-bottom: 1.2em
+
+  h2
+    font-weight: 700
+    margin-bottom: 0.5em
+    margin-top: 2em
+
+  ul
+    padding-left: 0
+    list-style: none
+
+  .listRules
+    list-style: disc
+    padding-left: 1em
+
+    li
+      font-style: normal
+      padding-left: 0
+      &:before
+        display: none
+
+.list
+  &Dashed
+    li
+      padding-left: 1em
+      font-style: italic
+      &:before
+        display: inline-block
+        content: "-"
+        margin-right: 0.5em
+
+  &Paragraph
+    padding-left: 1em
+
+  &Creation
+    li
+      margin-bottom: 1.2em
+
+  &Members
+    > li
+      margin-bottom: 1.5em
+
+    b
+      display: block
+      font-size: 1.1em
+
+    i
+      display: block
+      font-size: 0.95em
+      margin-bottom: 0.3em
+
+    ul
+      font-size: 0.95em
+      li
+        padding-left: 0.5em
+
+        &:before
+          display: inline-block
+          content: "-"
+          margin-right: 0.5em
+
+

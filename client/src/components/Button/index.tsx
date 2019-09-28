@@ -8,7 +8,7 @@ interface ButtonProps {
   className?: string,
   white?: boolean,
   type?: any,
-  onClick?: () => void,
+  onClick?: (any) => void,
 }
 
 const Button = ({ children, className, type, white, ...rest }: ButtonProps) => (
@@ -23,25 +23,6 @@ const Button = ({ children, className, type, white, ...rest }: ButtonProps) => (
   >
     {children}
   </button>
-);
-
-export const ZombieButton = ({ onClick, children, className }) => (
-  <Button
-    className={classnames(styles.zombie, className)}
-    {...{ onClick }}
-  >
-    {children}
-  </Button>
-);
-
-export const LabelButton = ({ children, customClass, htmlFor }) => (
-  // eslint-disable-next-line
-  <label
-    className={classnames(styles.button, styles.label, customClass)}
-    {...{ htmlFor }}
-  >
-    {children}
-  </label>
 );
 
 export default Button;

@@ -49,7 +49,7 @@ export const allowance = async (accountAddr, contractAddr) => {
   const allowance = await ApprovedToken.methods
     .allowance(accountAddr, contractAddr)
     .call();
-  return allowance;
+  return fromWei(allowance);
 };
 
 export const approve = async (guy, wad, encodedPayload) => {
