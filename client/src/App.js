@@ -47,9 +47,9 @@ class App extends Component {
     const { initialized } = this.props;
     let basename = '';
 
-    if (process.env.NODE_ENV === 'production') {
-      basename = '';
-    }
+    // if (process.env.NODE_ENV === 'production') {
+    //   basename = '';
+    // }
 
     return (
       <Routes {...{ basename, initialized }} />
