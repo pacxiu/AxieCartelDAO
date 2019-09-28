@@ -1,92 +1,15 @@
-import React, { Component, useState } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 
-import classnames from 'classnames';
 import styles from './index.module.sass';
 
 import { FullHeight, Container } from 'components/Layout';
 import Loader from 'components/Loader';
-import Button from 'components/Button';
-import RageQuit from 'components/RageQuit';
-import NewProposal from 'components/NewProposal';
 import { ErrorDesc } from 'components/Typography';
-import { Contribution } from 'components/Card';
 
-import { getMemberData, rageQuit, canRagequit } from 'services/AxieDaoService';
+import { getMemberData, canRagequit } from 'services/AxieDaoService';
 
-const MemberData = ({
-  member: {
-    address,
-    shares,
-    tribute,
-    delegateKey,
-    exists,
-    canRageQuit,
-  },
-  currentUser,
-}) => {
-  const [rageQuitOpen, toggleRageQuit] = useState(false);
-  const [newProposalOpen, toggleNewProposal] = useState(false);
-
-  return (
-    <div className={styles.member}>
-      <div className={styles.memberDetails}>
-        <p className={styles.title}>Address</p>
-        <i>{address}</i>
-        <Contribution
-          shares={shares}
-          tribute={tribute}
-          className={styles.contribution}
-        />
-        <p className={styles.title}>Delegate Key</p>
-        <i>{delegateKey}</i>
-      </div>
-      {currentUser === address
-        ? (
-          <React.Fragment>
-            <div className={styles.buttonsContainer}>
-              {exists
-                ? (
-                  <React.Fragment>
-                    exists
-                  </React.Fragment>
-                )
-                : (
-                  <React.Fragment>
-                    <Button
-                      className={classnames(styles.button, styles.rage)}
-                      onClick={() => toggleRageQuit(true)}
-                    >
-                      Rage Quit
-                    </Button>
-                  </React.Fragment>
-                )
-              }
-              <Button
-                className={styles.button}
-                onClick={() => toggleNewProposal(true)}
-              >
-                New Proposal
-              </Button>
-            </div>
-            <RageQuit
-              onClose={() => toggleRageQuit(false)}
-              isOpen={rageQuitOpen}
-              {...{ shares, currentUser }}
-            />
-            <NewProposal
-              onClose={() => toggleNewProposal(false)}
-              isOpen={newProposalOpen}
-              {...{ currentUser }}
-            />
-          </React.Fragment>
-        )
-        : null
-      }
-    </div>
-  );
-};
+import MemberPanel from './MemberPanel';
 
 class Member extends Component {
   state = {
@@ -124,6 +47,7 @@ class Member extends Component {
       const canRage = await canRagequit(memberData.highestIndexYesVote);
       memberData.canRageQuit = canRage;
 
+      console.log(memberData);
       this.setState({ memberData });
     } catch (error) {
       this.setState({ memberData: 'error' });
@@ -135,11 +59,11 @@ class Member extends Component {
     const { address } = this.props;
 
     return (
-      <FullHeight className={classnames(styles.container, styles.custom)}>
+      <FullHeight className={styles.container}>
         <Container>
           {memberData
             ? memberData !== 'error'
-              ? <MemberData member={memberData} currentUser={address} />
+              ? <MemberPanel member={memberData} currentUser={address} />
               : <ErrorDesc>There was an error fetching data from blockchain.</ErrorDesc>
             : <Loader />
           }

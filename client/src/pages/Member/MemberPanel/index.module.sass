@@ -1,0 +1,35 @@
+@import 'assets/styles/functions.module.sass'
+
+.title
+  font-weight: 500
+  margin-bottom: 0em
+
+.contribution
+  margin: pxToRem(30) 0
+
+.member
+  display: flex
+  align-items: center
+
+  &Details
+    padding-right: pxToRem(60)
+
+.button
+  margin-bottom: pxToRem(20)
+  min-width: 11em
+
+  &.rage
+    background: transparent
+    border-color: var(--font-color)
+
+    &:hover
+      color: var(--dark-bg)
+      background: var(--font-color)
+
+  &.approve
+    background: var(--accent-light)
+    border-color: var(--accent-light)
+
+    &:hover
+      color: var(--accent-light)
+      background: #fff

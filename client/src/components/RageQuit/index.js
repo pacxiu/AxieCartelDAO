@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import ParticlesLib from 'react-particles-js';
 
-import classnames from 'classnames';
 import styles from './index.module.sass';
 
 import Modal from 'components/Modal';
@@ -19,11 +17,7 @@ const RageQuitModal = ({
   const [sharesQuit, onSharesQuitChange] = useState('');
 
   return (
-    <Modal
-      {...{ onClose, isOpen }}
-      onClose={onClose}
-      isOpen={isOpen}
-    >
+    <Modal {...{ onClose, isOpen }}>
       <div className={styles.inputControl}>
         <Input
           value={sharesQuit}
@@ -36,7 +30,7 @@ const RageQuitModal = ({
         <p className={styles.hint}>Shares Owned: {shares}</p>
       </div>
       <Button
-        disabled={sharesQuit > 0}
+        disabled={sharesQuit <= 0}
         onClick={() => rageQuit(currentUser, sharesQuit)}
       >
         Submit

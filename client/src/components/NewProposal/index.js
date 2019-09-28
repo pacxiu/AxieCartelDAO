@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 
-import classnames from 'classnames';
 import styles from './index.module.sass';
 
 import Modal from 'components/Modal';
@@ -8,6 +7,7 @@ import Input, { Label } from 'components/Input';
 import Button from 'components/Button';
 
 import { submitProposal } from 'services/AxieDaoService';
+import { toU256 } from 'shared/contracts/utils';
 
 const NewProposal = ({
   onClose,
@@ -25,7 +25,7 @@ const NewProposal = ({
     submitProposal(
       currentUser,
       applicant,
-      tokenTribute,
+      toU256(tokenTribute),
       sharesRequested,
       details,
     );

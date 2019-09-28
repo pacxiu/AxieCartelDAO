@@ -167,7 +167,7 @@ export const submitVote = async (proposalIndex, uintVote, encodedPayload) => {
     return data;
   }
 
-  const vote = AxieDao.methods
+  const vote = await AxieDao.methods
     .submitVote(proposalIndex, uintVote)
     .send({ from: address })
     .once('transactionHash', txHash => console.info(txHash))
@@ -191,7 +191,7 @@ export const rageQuit = async (from, amount, encodedPayload) => {
     return data;
   }
 
-  const rage = AxieDao.methods
+  const rage = await AxieDao.methods
     .ragequit(amount)
     .send({ from })
     .once('transactionHash', txHash => console.info(txHash))
@@ -216,7 +216,7 @@ export const processProposal = async (id, encodedPayload) => {
     return data;
   }
 
-  const processedProposal = AxieDao.methods
+  const processedProposal = await AxieDao.methods
     .processProposal(id)
     .send({ from: address })
     .once('transactionHash', txHash => console.info(txHash))
@@ -243,13 +243,13 @@ export const submitProposal = async (
   }
 
   if (encodedPayload) {
-    const data = AxieDao.methods
+    const data = await AxieDao.methods
       .submitProposal(applicant, tokenTribute, sharesRequested, details)
       .encodeABI();
     return data;
   }
 
-  const proposal = AxieDao.methods
+  const proposal = await AxieDao.methods
     .submitProposal(applicant, tokenTribute, sharesRequested, details)
     .send({ from })
     .once('transactionHash', txHash => console.info(txHash))
@@ -268,17 +268,17 @@ const getGeneralData = async () => {
   // eslint-disable-next-line
   const bank = await balanceOf(contracts.GuildBank.address);
   // probably will not be dynamically changed
-  // const gracePeriodLength = await getGracePeriodLength();
-  // const votingPeriodLength = await getVotingPeriodLength();
-  // const periodDuration = await getPeriodDuration();
+  const gracePeriodLength = await getGracePeriodLength();
+  const votingPeriodLength = await getVotingPeriodLength();
+  const periodDuration = await getPeriodDuration();
 
   return {
     shares,
     bank,
     currentPeriod,
-    gracePeriodLength: 35,
-    votingPeriodLength: 35,
-    periodDuration: 17280,
+    gracePeriodLength,
+    votingPeriodLength,
+    periodDuration,
   };
 };
 

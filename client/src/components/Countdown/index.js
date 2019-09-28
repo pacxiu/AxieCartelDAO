@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { connect } from 'react-redux';
 import { ProposalStatus } from 'shared/proposals';
 
 const periodsToTime = (periods, status, didPass, periodDuration = 17280) => {
@@ -32,10 +33,20 @@ const periodsToTime = (periods, status, didPass, periodDuration = 17280) => {
   return `Voting Ends in: ${string}`;
 };
 
-const Countdown = ({ className, periodDifference, status, didPass }) => (
+const Countdown = ({ className, periodDifference, status, didPass, periodDuration }) => (
   <p className={className}>
-    {periodsToTime(periodDifference, status, didPass)}
+    {periodsToTime(periodDifference, status, didPass, periodDuration)}
   </p>
 );
 
-export default Countdown;
+const mapStateToProps = ({
+  daoData: {
+    general: {
+      periodDuration,
+    },
+  },
+}) => ({
+  periodDuration,
+});
+
+export default connect(mapStateToProps)(Countdown);

@@ -2,7 +2,7 @@
 @import 'assets/styles/functions.module.sass'
 
 .button
-  color: #fff
+  color: var(--font-color)
   background-color: var(--accent-dark)
   border: 1px solid var(--accent-dark)
   font-weight: 500
@@ -20,32 +20,12 @@
   outline: none!important
 
   &:hover
-    background-color: #fff
-    color: var(--accent-light)
+    background-color: var(--font-color)
+    color: var(--accent-dark)
 
   &[disabled]
-    color: #fff
+    color: var(--font-color)
     background-color: #bbb
     border: none
     cursor: not-allowed
-
-.white
-  background: #fff
-  border: none
-  color: cTundora
-  box-shadow: 0 0.2em 1.3em -0.6em font-color
-  padding-left: 2.5em
-  padding-right: 2.5em
-  position: relative
-  z-index: 2
-
-  &:hover
-    background: cTundora
-    color: #fff
-
-.label
-  background-color: accent-plant
-  border-color: accent-plant
-
-  &:hover
-    color: accent-plant
+    

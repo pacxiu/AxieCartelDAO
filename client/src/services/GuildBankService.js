@@ -39,4 +39,3 @@ export const getAllEvents = async () => {
 
   return events;
 };
-

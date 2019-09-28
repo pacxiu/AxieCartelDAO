@@ -3,7 +3,6 @@ import { hot } from 'react-hot-loader';
 import { connect } from 'react-redux';
 
 import { setToken, setUserData } from 'duck/user';
-import { createRequest } from 'shared/helpers';
 
 import { initWeb3 } from 'services/Web3Service';
 import { getAllEvents } from 'services/AxieDaoService';

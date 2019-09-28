@@ -61,7 +61,7 @@ class Members extends React.Component {
           }
         </CardsContainer>
       </FullHeight>
-    )
+    );
   }
 }
 

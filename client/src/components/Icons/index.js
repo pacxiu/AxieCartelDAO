@@ -30,4 +30,4 @@ export const WithDaiIcon = ({ className, type, children }) => (
     <DaiIcon {...{ type }} />
     {children}
   </span>
-)
+);
