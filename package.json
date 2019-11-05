@@ -7,7 +7,7 @@
     "ethereumjs-util": "^6.1.0",
     "express": "^4.16.3",
     "jsonwebtoken": "^8.4.0",
-    "mongoose": "^5.3.8",
+    "mongoose": "^5.7.5",
     "mongoose-validator": "^2.1.0",
     "nodemon": "^1.18.10"
   },
